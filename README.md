@@ -1,11 +1,16 @@
-# [Título del trabajo]
+## Juego de Precisión
 
-[Descripción breve del proyecto a realizar (2-3 frases).]
+Un juego basado en las máquinas recreativas de precisón en las que mediante el uso de un teclado hay que acertar en un objetivo para así poder ganar un premio.
+Este juego estará compuesto por el mecanismo del propio juego conectado a un ordenador desde el que se podrá ver registro de las puntuaciones de los jugadores y demás.
 
 ## Integrantes del equipo
 
-[Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
+Matías López Viagel (MatiasLopezViagel)
+David Méndez Velásquez (Dmeendezz)
+Daniel Olsson Andrés (DanielOlssonAndres)
 
 ## Objetivos del trabajo
 
-[Lista de los objetivos que se persiguen con el trabajo propuesto.]
+Crear el mecanismo mecánico del juego.
+Comunicar los datos del juego con un ordenador.
+Guardar los datos de los jugadores y crear un menú para el juego accesible desde el ordenador.
