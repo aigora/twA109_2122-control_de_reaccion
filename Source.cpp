@@ -1,4 +1,4 @@
-#include <stdio.h>
+Ôªø#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <locale.h>
@@ -11,9 +11,9 @@ int main(void)
 	opcion = menu_ppal();
 
 	switch (opcion)
-	{ 
+	{
 		case 1:
-			
+
 			break;
 
 		case 2:
@@ -35,13 +35,16 @@ int main(void)
 		case 6:
 
 			break;
+		case 7:
+
+			break;
 	}
 
-		
 
 
 
-return 0;
+
+	return 0;
 }
 
 int menu_ppal(void)
@@ -50,21 +53,22 @@ int menu_ppal(void)
 	int elegido;
 	do
 	{
-	printf("\n\n\tCONTROL DE REACCI”N");
-	printf("\n\t===================\n");
-	printf("\n 1 - Configurar proceso");
-	printf("\n 2 - Temperatura");
-	printf("\n 3 - PresiÛn");
-	printf("\n 4 - Volumen");
-	printf("\n 5 - Vaciado de emergencia");
-	printf("\n 6 - Acabar proceso");
-	printf("\n\n\tIntroduzca opciÛn:");
-	scanf_s("%d", &elegido);
+		printf("\n\n\tCONTROL DE REACCI√ìN");
+		printf("\n\t===================\n");
+		printf("\n 1 - Configurar proceso qu√≠mico");
+		printf("\n 2 - Comezar proceso qu√≠mico");
+		printf("\n 3 - Temperatura");
+		printf("\n 4 - Presi√≥n");
+		printf("\n 5 - Volumen");
+		printf("\n 6 - Vaciado de emergencia");
+		printf("\n 7 - Acabar proceso qu√≠mico");
+		printf("\n\n\tIntroduzca opci√≥n:");
+		scanf_s("%d", &elegido);
 
-	if (elegido < 1 || elegido >6)
-		printf("\nOpciÛn no v·lida");
+		if (elegido < 1 || elegido >6)
+			printf("\nOpci√≥n no v√°lida");
 
 	} while (elegido < 1 || elegido >6);
 
-return elegido;
+	return elegido;
 }
