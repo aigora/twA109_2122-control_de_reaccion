@@ -53,15 +53,15 @@ int menu_ppal(void)
 	int elegido;
 	do
 	{
-		printf("\n\n\tCONTROL DE REACCIÓN");
+		printf("\n\n\tCONTROL DE DESTILACIÓN");
 		printf("\n\t===================\n");
-		printf("\n 1 - Configurar proceso químico");
-		printf("\n 2 - Comezar proceso químico");
-		printf("\n 3 - Temperatura");
-		printf("\n 4 - Presión");
-		printf("\n 5 - Volumen");
-		printf("\n 6 - Vaciado de emergencia");
-		printf("\n 7 - Acabar proceso químico");
+		printf("\n 1 - Configurar destilación");
+		printf("\n 2 - Comezar destilación");
+		printf("\n 3 - Datos temperatura");
+		printf("\n 4 - Datos presión");
+		printf("\n 5 - Datos volumen");
+		printf("\n 6 - Apagar calentador");
+		printf("\n 7 - Forzar fin de proceso");
 		printf("\n\n\tIntroduzca opción:");
 		scanf_s("%d", &elegido);
 
