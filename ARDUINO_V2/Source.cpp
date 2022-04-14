@@ -143,6 +143,7 @@ int main(void)
 				printf("\nTemperatura: %f\n", temperatura);
 				return temperatura;
 			}
+			//
 
 
 			if (distancia <= 0)
