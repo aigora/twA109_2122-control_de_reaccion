@@ -33,6 +33,8 @@ float leer_sensor_temperatura(Serial* Arduino);
 void activar_rele(Serial* Arduino);
 void apagar_rele(Serial* Arduino);
 float volumen(float);
+void iniciar_pro_automatico(int temperatura, int volumen);
+PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 
 //CONEXIÓN
 int main(void)
@@ -40,7 +42,7 @@ int main(void)
 	int flag = 0;
 	Serial* Arduino;
 	char puerto[] = "COM5";
-	int opcion_menu;
+	int opcion_menu, opcion;
 	char fallo, seleccionada[TAM];
 	int temperaturaselec, volumenselec;
 	PROCESO* pro;
@@ -68,7 +70,7 @@ int main(void)
 			scanf_s("%d", &cab->temperatura);
 			printf("  Introduzca volumen máximo de destilado (ml): ");
 			scanf_s("%d", &cab->volmax);
-			printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como ", (*cab).temperatura, (*cab).volmax);
+			printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como: ", (*cab).temperatura, (*cab).volmax);
 			puts(cab->nombre);
 			break;
 		case 2:
@@ -82,12 +84,12 @@ int main(void)
 				printf("\t==================================\n");
 
 				pro = cab;
-				printf("\n  -Destilación a %dCº y %dml de volumen objetivo con nombre ", (*pro).temperatura, (*pro).volmax);
+				printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre ", (*pro).temperatura, (*pro).volmax);
 				puts(pro->nombre);
 				while (pro->siguiente != NULL)
 				{
 					pro = pro->siguiente;
-					printf("\n  -Destilación a %dCº y %dml de volumen objetivo con nombre ", (*pro).temperatura, (*pro).volmax);
+					printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
 					puts(pro->nombre);
 				}
 				scanf_s("%c", &fallo);
@@ -107,13 +109,35 @@ int main(void)
 					if (flag == 0)
 						printf("\n  El nombre seleccionado no corresponde con ninguna destilación guardada\n");
 				} while (flag == 0);
-
 				for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
-					fallo = 'a';
+				{}
 				printf("\n  Ha seleccionado la destilación ");
 				puts(pro->nombre);
-				temperaturaselec = (*pro).temperatura;
-				volumenselec = (*pro).volmax;
+				do
+				{
+					printf(" OPCIONES");
+					printf("\n==========");
+					printf("\n 1 - Iniciar proceso");
+					printf("\n 2 - Eliminar proceso");
+					printf("\n 3 - Volver a menú principal");
+					printf("\n\n Escoja opción: ");
+					scanf_s("%d", &opcion);
+					if (opcion != 1 || opcion != 2 || opcion != 3)
+						printf("\n Opción no valida\n\n");
+				} while (opcion != 1 || opcion != 2 || opcion != 3);
+				switch (opcion)
+				{
+				case 1:
+					temperaturaselec = (*pro).temperatura;
+					volumenselec = (*pro).volmax;
+					iniciar_pro_automatico(temperaturaselec, volumenselec);
+					break;
+				case 2: 
+					eliminar_proceso(seleccionada, pro, cab);
+					break;
+				case 3:
+					break;
+				}
 			}
 
 			break;
@@ -403,3 +427,41 @@ void medicion_unica_temp(Serial* Arduino)
 	temperatura = leer_sensor_temperatura(Arduino);
 	printf("\nTemperatura: %f\n", temperatura);
 }
+
+//ELIMINAR PROCESO DE LISTA
+PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
+{
+	PROCESO* control;
+	pro = cab;
+	control = cab;
+	while (strcmp(seleccionada, (*pro).nombre) != 0)
+	{
+		control = pro;
+		pro = pro->siguiente;
+	}
+	if (pro->siguiente == NULL || pro != cab)
+	{
+		control->siguiente = NULL;
+		free(pro);
+		pro = cab;
+	}
+	if (pro == cab)
+	{
+		cab = pro->siguiente;
+		free(pro);
+	}
+	if (pro->siguiente != NULL || pro != cab)
+	{
+		control->siguiente = pro->siguiente;
+		free(pro);
+		pro = cab;
+	}
+	return cab;
+}
+
+//INICIAR PROCESO AUTOMÁTICO
+void iniciar_pro_automatico(int temperatura, int volumen) 
+{
+
+}
+
