@@ -1,14 +1,17 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
 #include <conio.h>
 #include "SerialClass/SerialClass.h"
+#include<math.h>
 
 #define MAX_BUFFER 200
 #define PAUSA_MS 200
 #define TAM 20
-
+#define RADIO 3
+#define ALTURA 6
 struct nodo
 {
 	char nombre[TAM];
@@ -29,6 +32,7 @@ void medicion_unica_temp(Serial* Arduino);
 float leer_sensor_temperatura(Serial* Arduino);
 void activar_rele(Serial* Arduino);
 void apagar_rele(Serial* Arduino);
+float volumen(float);
 
 //CONEXIÓN
 int main(void)
@@ -105,8 +109,8 @@ int main(void)
 				} while (flag == 0);
 
 				for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
-				{ }
-					printf("\n  Ha seleccionado la destilación ");
+					fallo = 'a';
+				printf("\n  Ha seleccionado la destilación ");
 				puts(pro->nombre);
 				temperaturaselec = (*pro).temperatura;
 				volumenselec = (*pro).volmax;
@@ -117,8 +121,43 @@ int main(void)
 
 			break;
 		case 4:
+			printf("\n");
+			printf("\t==================================\n");
+			printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
+			printf("\t==================================\n");
+
+			float distancia, temperatura;
+
+			void medicion_unica_ultra(Serial * Arduino, char* port);
+			{
+				float distancia;
+				distancia = leer_sensor_distancia(Arduino);
+				if (distancia != -1)
+					printf("\nDistancia: %f\n", distancia);
+				return distancia;
+			}
+
+			void medicion_unica_temp(Serial * Arduino);
+			{
+				float temperatura;
+				temperatura = leer_sensor_temperatura(Arduino);
+				printf("\nTemperatura: %f\n", temperatura);
+				return temperatura;
+			}
+
+
+			if (distancia <= 0)
+				printf("El sensor de distancia da error\n");
+			else
+				printf("El sensor de temperatura funciona\n");
+
+			if (temperatura <= 0 || temperatura > 150)
+				printf("El sensor de temperatura da error\n");
+			else
+				printf("El sensor de temperatura funciona\n");
 
 			break;
+
 		case 5:
 
 			break;
@@ -182,6 +221,19 @@ float leer_sensor_temperatura(Serial* Arduino)
 	temperatura = float_from_cadena(mensaje_recibido);
 
 	return temperatura;
+}
+
+//CALCULA EL VOLUMEN A PARTIR DE LA DISTANCIA
+float volumen(float distancia)
+{
+	float vol;
+	float pi = acos(-1.0);
+	float h;
+
+	h = ALTURA - distancia;
+	vol = (float)(h * pi * RADIO * RADIO);
+
+	return vol;
 }
 
 //ACTIVAR RELÉ
