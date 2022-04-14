@@ -105,7 +105,7 @@ int main(void)
 				} while (flag == 0);
 
 				for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
-
+				{ }
 					printf("\n  Ha seleccionado la destilación ");
 				puts(pro->nombre);
 				temperaturaselec = (*pro).temperatura;

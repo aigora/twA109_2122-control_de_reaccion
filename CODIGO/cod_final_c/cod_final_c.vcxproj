@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{37fda0ab-4c80-4d32-bd05-57857e90f79c}</ProjectGuid>
-    <RootNamespace>codfinalc</RootNamespace>
+    <ProjectGuid>{2d8c6018-2cd0-44ce-a5e6-514c9a2cdd2b}</ProjectGuid>
+    <RootNamespace>codfinalC</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,13 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\SerialClass\SerialClass.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp" />
     <ClCompile Include="SerialClass\SerialClass.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\SerialClass\SerialClass.h" />
     <ClInclude Include="SerialClass\SerialClass.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

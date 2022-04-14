@@ -1,1 +1,2 @@
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\x64\Debug\cod_final_c.exe
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_C\x64\Debug\cod_final_C.exe
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\x64\Debug\cod_final_C.exe

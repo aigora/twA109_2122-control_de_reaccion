@@ -1,34 +1,14 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1088,5): warning MSB8027: Dos o más archivos con el mismo nombre de SerialClass.cpp producirán salidas en la misma ubicación. Esto puede dar lugar a un resultado de compilación incorrecto. Los archivos implicados son ..\..\..\..\..\..\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\SerialClass\SerialClass.cpp, SerialClass\SerialClass.cpp.
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1088,5): warning MSB8027: Dos o más archivos con el mismo nombre de Source.cpp producirán salidas en la misma ubicación. Esto puede dar lugar a un resultado de compilación incorrecto. Los archivos implicados son ..\..\..\..\..\..\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp, Source.cpp.
-  SerialClass.cpp
-  Source.cpp
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(53,12): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(53,12): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(53,12): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(53,12): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(89,13): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(89,13): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(89,13): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(89,13): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(222,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(257,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(302,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\ARDUINO_V2\Source.cpp(332,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-  SerialClass.cpp
-  Source.cpp
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(53,12): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(53,12): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(53,12): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(53,12): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(89,13): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(89,13): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(89,13): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(89,13): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(222,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(257,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(302,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\Source.cpp(332,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-  Generando código...
-x64\Debug\SerialClass.obj : warning LNK4042: objeto especificado más de una vez; omitidos los sobrantes
-x64\Debug\Source.obj : warning LNK4042: objeto especificado más de una vez; omitidos los sobrantes
-  cod_final_c.vcxproj -> C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\cod_final_c\x64\Debug\cod_final_c.exe
+﻿  Source.cpp
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(53,12): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(53,12): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(53,12): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(53,12): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(89,13): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(89,13): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(89,13): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(89,13): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(222,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(257,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(302,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\Source.cpp(332,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+  cod_final_C.vcxproj -> C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\TRABAJO control de reaccion\CODIGO\cod_final_C\x64\Debug\cod_final_C.exe
