@@ -1,5 +1,0 @@
-﻿  Source.cpp
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\ARDUINO_V2\Source.cpp(111,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\ARDUINO_V2\Source.cpp(146,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\ARDUINO_V2\Source.cpp(191,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-  ARDUINO_V2.vcxproj -> C:\Users\olsso\OneDrive\Escritorio\Universidad\1.2\Informática\Control_de_reacción\ARDUINO_V2\x64\Debug\ARDUINO_V2.exe
