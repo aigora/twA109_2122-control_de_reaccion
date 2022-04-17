@@ -33,7 +33,8 @@ float leer_sensor_temperatura(Serial* Arduino);
 void activar_rele(Serial* Arduino);
 void apagar_rele(Serial* Arduino);
 float volumen(float);
-void iniciar_pro_automatico(int temperatura, int volumen);
+void iniciar_pro_automatico(int temperatura, int volumen); 
+void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 
 //CONEXIÓN
@@ -182,7 +183,9 @@ int main(void)
 
 			break;
 
-		case 5:
+		case 5: guia();
+			
+				
 
 			break;
 		case 6:
@@ -459,9 +462,28 @@ PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
 	return cab;
 }
 
-//INICIAR PROCESO AUTOMÁTICO
+//INICIAR  PROCESO AUTOMÁTICO
 void iniciar_pro_automatico(int temperatura, int volumen) 
 {
 
 }
+
+//GUÍA
+void guia(void)
+{
+	printf("\t==================================\n");
+	printf("\t\t  GUÍA DE USO\n");
+	printf("\t==================================\n\n");
+	printf(" Este programa de destilación monitorizada a tiempo real, permite configurar nuevas destilaciones e iniciarlas,\n");
+	printf(" comenzar un proceso manual(controlando la temperatura y el volumen final deseado) o hacer pruebas del funcionamiento\n del mismo.\n\n\n");
+	printf(" Para configurar nuevas destilaciones, elija la opción '1'. Después, escriba el nombre de la destilación deseada,\n");
+	printf(" seguido de la temperatura de ebullición del líquido a destilar, y el volumen de destilado que busca obtener.\n Esta destilación se guardará en la memoria del programa.\n\n");
+	printf(" Para acceder a destilaciones preconfiguradas, pulse '2'.Le aparecerán todas las destilaciones que usted haya\n");
+	printf(" configurado previamente.Para seleccionar una destilación, escriba el nombre de la misma.Pulse '1' si desea comenzar\n");
+	printf(" el proceso de destilación, '2' en caso de que quiera borrar esta destilación de la memoria del programa o '3' para\n volver al menú principal.\n\n");
+	printf(" Para realizar un proceso manual, pulse '3'.Podrá activar y desactivar el calentador, y se le mostrará a tiempo real\n");
+	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen final obtenido, pudiendo acabar el\n proceso cuando desee.\n\n");
+	printf(" Para realizar una prueba del funcionamiento de los sensores, elija la opción '4'.\n\n\n\n");
+}
+
 
