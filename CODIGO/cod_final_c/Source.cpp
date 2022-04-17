@@ -12,6 +12,7 @@
 #define TAM 20
 #define RADIO 3
 #define ALTURA 6
+
 struct nodo
 {
 	char nombre[TAM];
@@ -22,7 +23,6 @@ struct nodo
 typedef struct nodo PROCESO;
 
 int menu_ppal(void);
-void medicion_unica_ultra(Serial* Arduino, char* port);
 float leer_sensor_distancia(Serial* Arduino);
 float float_from_cadena(char* cadena);
 int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_recibir);
@@ -30,27 +30,29 @@ void monitorizar_sensor_distancia(Serial* Arduino);
 void monitorizar_sensor_temperatura(Serial* Arduino);
 void medicion_unica_temp(Serial* Arduino);
 float leer_sensor_temperatura(Serial* Arduino);
-void activar_rele(Serial* Arduino);
-void apagar_rele(Serial* Arduino);
+int activar_rele(Serial* Arduino);
+int apagar_rele(Serial* Arduino);
 float volumen(float);
 void iniciar_pro_automatico(int temperatura, int volumen); 
 void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
+PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab);
+void prueba_funcionamiento(Serial* Arduino);
+void inicio_programa(void);
 
-//CONEXIÓN
 int main(void)
 {
-	int flag = 0;
 	Serial* Arduino;
 	char puerto[] = "COM5";
-	int opcion_menu, opcion;
-	char fallo, seleccionada[TAM];
-	int temperaturaselec, volumenselec;
-	PROCESO* pro;
+	int opcion_menu;
+	char fallo;
+	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
 
 	setlocale(LC_ALL, "es-ES");
 	Arduino = new Serial((char*)puerto);
+	inicio_programa();
 	do
 	{
 		opcion_menu = menu_ppal();
@@ -58,139 +60,37 @@ int main(void)
 		{
 		case 1:
 			scanf_s("%c", &fallo);
-			pro = (PROCESO*)malloc(sizeof(PROCESO));
-			pro->siguiente = cab;
-			cab = pro;
-			printf("\n");
-			printf("\t==================================\n");
-			printf("\t   CONFIGURAR NUEVA DESTILACIÓN\n");
-			printf("\t==================================\n");
-			printf("  Introduzca nombre de destilación: ");
-			fgets(cab->nombre, TAM, stdin);
-			printf("  Introduzca temperatura deseada (Cº): ");
-			scanf_s("%d", &cab->temperatura);
-			printf("  Introduzca volumen máximo de destilado (ml): ");
-			scanf_s("%d", &cab->volmax);
-			printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como: ", (*cab).temperatura, (*cab).volmax);
-			puts(cab->nombre);
+			system("cls");
+			cab = conf_nueva_destilacion(pro, cab);
+			pro = cab;
 			break;
-		case 2:
+		case 2:  //inacabado
 			if (cab == NULL)
+				system("cls");
 				printf("\n  No hay ninguna destilación definida\n");
-			else
+			if (cab != NULL)
 			{
-				printf("\n");
-				printf("\t==================================\n");
-				printf("\t  DESTILACIONES PRECONFIGURADAS\n");
-				printf("\t==================================\n");
-
+				cab = destilaciones_preconfiguradas(pro, cab);
 				pro = cab;
-				printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre ", (*pro).temperatura, (*pro).volmax);
-				puts(pro->nombre);
-				while (pro->siguiente != NULL)
-				{
-					pro = pro->siguiente;
-					printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
-					puts(pro->nombre);
-				}
-				scanf_s("%c", &fallo);
-				do
-				{
-					printf("  Seleccione destilación escribiendo el nombre de la deseada: ");
-					fgets(seleccionada, TAM, stdin);
-
-					pro = cab;
-					do
-					{
-						if (strcmp(seleccionada, (*pro).nombre) == 0)
-							flag = 1;
-						pro = pro->siguiente;
-					} while (pro != NULL);
-
-					if (flag == 0)
-						printf("\n  El nombre seleccionado no corresponde con ninguna destilación guardada\n");
-				} while (flag == 0);
-				for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
-				{}
-				printf("\n  Ha seleccionado la destilación ");
-				puts(pro->nombre);
-				do
-				{
-					printf(" OPCIONES");
-					printf("\n==========");
-					printf("\n 1 - Iniciar proceso");
-					printf("\n 2 - Eliminar proceso");
-					printf("\n 3 - Volver a menú principal");
-					printf("\n\n Escoja opción: ");
-					scanf_s("%d", &opcion);
-					if (opcion != 1 || opcion != 2 || opcion != 3)
-						printf("\n Opción no valida\n\n");
-				} while (opcion != 1 || opcion != 2 || opcion != 3);
-				switch (opcion)
-				{
-				case 1:
-					temperaturaselec = (*pro).temperatura;
-					volumenselec = (*pro).volmax;
-					iniciar_pro_automatico(temperaturaselec, volumenselec);
-					break;
-				case 2: 
-					eliminar_proceso(seleccionada, pro, cab);
-					break;
-				case 3:
-					break;
-				}
 			}
-
 			break;
 		case 3:
 
 			break;
 		case 4:
-			printf("\n");
-			printf("\t==================================\n");
-			printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
-			printf("\t==================================\n");
-
-			float distancia, temperatura;
-
-			void medicion_unica_ultra(Serial * Arduino, char* port);
-			{
-				float distancia;
-				distancia = leer_sensor_distancia(Arduino);
-				if (distancia != -1)
-					printf("\nDistancia: %f\n", distancia);
-				return distancia;
-			}
-
-			void medicion_unica_temp(Serial * Arduino);
-			{
-				float temperatura;
-				temperatura = leer_sensor_temperatura(Arduino);
-				printf("\nTemperatura: %f\n", temperatura);
-				return temperatura;
-			}
-
-
-			if (distancia <= 0)
-				printf("El sensor de distancia da error\n");
-			else
-				printf("El sensor de temperatura funciona\n");
-
-			if (temperatura <= 0 || temperatura > 150)
-				printf("El sensor de temperatura da error\n");
-			else
-				printf("El sensor de temperatura funciona\n");
-
+			prueba_funcionamiento(Arduino);
 			break;
-
-		case 5: guia();
-			
-				
-
+		case 5:
+			guia();
 			break;
 		case 6:
+			system("cls");
+			printf("\n\n\n\n\t\t\t\tFIN DE PROGRAMA\n\n\n\n");
 			break;
-		default: printf("\nOpción incorrecta\n");
+		default: 
+			system("cls");
+			printf("\n  Opción incorrecta\n");
+			break;
 		}
 	} while (opcion_menu != 6);
 	return 0;
@@ -200,6 +100,7 @@ int main(void)
 int menu_ppal(void)
 {
 	int opcion;
+	
 	printf("\n");
 	printf("\t==================================\n");
 	printf("\t\t  MENÚ PRINCIPAL\n");
@@ -226,8 +127,7 @@ float leer_sensor_distancia(Serial* Arduino)
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_DISTANCIA\n", mensaje_recibido);
 	if (bytesRecibidos <= 0)
 	{
-		printf("\nNo se ha recibido respuesta a la petición\n");
-		distancia = -1;
+		distancia = -500;
 	}
 	else
 	{
@@ -244,8 +144,12 @@ float leer_sensor_temperatura(Serial* Arduino)
 	char mensaje_recibido[MAX_BUFFER];
 
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_TEMPERATURA\n", mensaje_recibido);
-
 	temperatura = float_from_cadena(mensaje_recibido);
+
+	if (bytesRecibidos <= 0)
+	{
+		temperatura = -500;
+	}
 
 	return temperatura;
 }
@@ -264,25 +168,33 @@ float volumen(float distancia)
 }
 
 //ACTIVAR RELÉ
-void activar_rele(Serial* Arduino)
+int activar_rele(Serial* Arduino)
 {
 	int bytesRecibidos;
 	char mensaje_recibido[MAX_BUFFER];
+	int funciona = 1;
 
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "CIERRA_RELE\n", mensaje_recibido);
-	printf("\n");
-	puts(mensaje_recibido);
+	if (bytesRecibidos <= 0)
+	{
+		funciona = 0;
+	}
+	return funciona;
 }
 
 //APAGAR RELÉ
-void apagar_rele(Serial* Arduino)
+int apagar_rele(Serial* Arduino)
 {
 	int bytesRecibidos;
 	char mensaje_recibido[MAX_BUFFER];
+	int funciona = 1;
 
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "ABRE_RELE\n", mensaje_recibido);
-	printf("\n");
-	puts(mensaje_recibido);
+	if (bytesRecibidos <= 0)
+	{
+		funciona = 0;
+	}
+	return funciona;
 }
 
 //SEPARAR NÚMEROS DE CADENA DE CARACTERES
@@ -414,21 +326,42 @@ void monitorizar_sensor_temperatura(Serial* Arduino)
 	return;
 }
 
-//MIDE ULTRASONIDO UNA VEZ
-void medicion_unica_ultra(Serial* Arduino, char* port)
+//PRUEBA FUCIONAMIENTO
+void prueba_funcionamiento(Serial* Arduino)
 {
-	float distancia;
-	distancia = leer_sensor_distancia(Arduino);
-	if (distancia != -1)
-		printf("\nDistancia: %f\n", distancia);
-}
+	char fallo;
+	float distancia, temperatura, funciona;
 
-//MIDE TEMPERATURA UNA VEZ
-void medicion_unica_temp(Serial* Arduino)
-{
-	float temperatura;
+	system("cls");
+	printf("\n");
+	printf("\t================================\n");
+	printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
+	printf("\t================================\n");
+	
+	distancia = leer_sensor_distancia(Arduino);
 	temperatura = leer_sensor_temperatura(Arduino);
-	printf("\nTemperatura: %f\n", temperatura);
+	funciona = activar_rele(Arduino);
+	funciona = apagar_rele(Arduino);
+
+	if (distancia == -500)
+		printf("\n  Error en el sensor de distancia\n");
+	else
+		printf("\n  El sensor de temperatura funciona correctamente\n");
+
+	if (temperatura == -500)
+		printf("\n  Error en el sensor de temperatura\n");
+	else
+		printf("\n  El sensor de temperatura funciona correctamente\n");
+
+	if (funciona == 0)
+		printf("\n  Error en el relé que activa la placa calentadora\n");
+	if (funciona == 1)
+		printf("\n  El relé que activa la placa calentadora funciona correctamente\n");
+
+	printf("\n\n\tPULSE <ENTER>");
+	scanf_s("%c", &fallo);
+	scanf_s("%c", &fallo);
+	system("cls");
 }
 
 //ELIMINAR PROCESO DE LISTA
@@ -462,28 +395,149 @@ PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
 	return cab;
 }
 
-//INICIAR  PROCESO AUTOMÁTICO
-void iniciar_pro_automatico(int temperatura, int volumen) 
-{
-
-}
-
 //GUÍA
 void guia(void)
 {
+	char fallo;
+
+	system("cls");
 	printf("\t==================================\n");
 	printf("\t\t  GUÍA DE USO\n");
 	printf("\t==================================\n\n");
-	printf(" Este programa de destilación monitorizada a tiempo real, permite configurar nuevas destilaciones e iniciarlas,\n");
-	printf(" comenzar un proceso manual(controlando la temperatura y el volumen final deseado) o hacer pruebas del funcionamiento\n del mismo.\n\n\n");
+	printf(" Este programa de destilación monitorizada a tiempo real permite configurar nuevas destilaciones automáticas,\n");
+	printf(" comenzar un proceso manual (controlando la temperatura y el volumen final deseado) o hacer pruebas del funcionamiento\n del mismo.\n\n");
 	printf(" Para configurar nuevas destilaciones, elija la opción '1'. Después, escriba el nombre de la destilación deseada,\n");
 	printf(" seguido de la temperatura de ebullición del líquido a destilar, y el volumen de destilado que busca obtener.\n Esta destilación se guardará en la memoria del programa.\n\n");
 	printf(" Para acceder a destilaciones preconfiguradas, pulse '2'.Le aparecerán todas las destilaciones que usted haya\n");
-	printf(" configurado previamente.Para seleccionar una destilación, escriba el nombre de la misma.Pulse '1' si desea comenzar\n");
-	printf(" el proceso de destilación, '2' en caso de que quiera borrar esta destilación de la memoria del programa o '3' para\n volver al menú principal.\n\n");
-	printf(" Para realizar un proceso manual, pulse '3'.Podrá activar y desactivar el calentador, y se le mostrará a tiempo real\n");
-	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen final obtenido, pudiendo acabar el\n proceso cuando desee.\n\n");
-	printf(" Para realizar una prueba del funcionamiento de los sensores, elija la opción '4'.\n\n\n\n");
+	printf(" configurado previamente. Para seleccionar una destilación, escriba el nombre de la misma y posteriormente, pulse '1'\n");
+	printf(" si desea comenzar el proceso de destilación, '2' en caso de que quiera borrarla de la memoria del programa, o '3' para\n volver al menú principal.\n\n");
+	printf(" Para realizar un proceso manual, pulse '3'. Podrá activar y desactivar el calentador, y se le mostrará a tiempo real\n");
+	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen de destilado que se vaya obteniendo,\n pudiendo acabar el proceso cuando desee.\n\n");
+	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
+	printf(" Para salir del programa, elija la opción '6'.\n\n\n");
+	printf("\n\tPULSE <ENTER>");
+	scanf_s("%c", &fallo);
+	scanf_s("%c", &fallo);
+	system("cls");
 }
 
+//PANTALLA INICIO PROGRAMA
+void inicio_programa(void)
+{
+	char fallo;
+	
+	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
+	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER>\n\n\n");
+	scanf_s("%c", &fallo);
+	system("cls");
+}
+
+//CONFIGURAR NUEVA DESTILACIÓN
+PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab)
+{
+	char fallo;
+
+	pro = (PROCESO*)malloc(sizeof(PROCESO));
+	pro->siguiente = cab;
+	cab = pro;
+	system("cls");
+	printf("\n");
+	printf("\t==================================\n");
+	printf("\t   CONFIGURAR NUEVA DESTILACIÓN\n");
+	printf("\t==================================\n\n");
+	printf("  Introduzca nombre de destilación: ");
+	fgets(cab->nombre, TAM, stdin);
+	printf("  Introduzca temperatura deseada (Cº): ");
+	scanf_s("%d", &cab->temperatura);
+	printf("  Introduzca volumen máximo de destilado (ml): ");
+	scanf_s("%d", &cab->volmax);
+	printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como: ", (*cab).temperatura, (*cab).volmax);
+	puts(cab->nombre);
+	printf("\n\tPULSE <ENTER>");
+	scanf_s("%c", &fallo);
+	scanf_s("%c", &fallo);
+	system("cls");
+	return cab;
+}
+
+//DESTILACIONES PRECONFIGURADAS (inacabada)
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
+{
+	int opcion, flag = 0;
+	char  seleccionada[TAM];
+	int temperaturaselec, volumenselec;
+	char fallo;
+
+	system("cls");
+	printf("\n");
+	printf("\t==================================\n");
+	printf("\t  DESTILACIONES PRECONFIGURADAS\n");
+	printf("\t==================================\n");
+
+	pro = cab;
+	printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
+	puts(pro->nombre);
+	while (pro->siguiente != NULL)
+	{
+		pro = pro->siguiente;
+		printf("\n  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
+		puts(pro->nombre);
+	}
+	scanf_s("%c", &fallo);
+	do
+	{
+		printf("  Seleccione destilación escribiendo el nombre de la deseada: ");
+		fgets(seleccionada, TAM, stdin);
+
+		pro = cab;
+		do
+		{
+			if (strcmp(seleccionada, (*pro).nombre) == 0)
+				flag = 1;
+			pro = pro->siguiente;
+		} while (pro != NULL);
+
+		if (flag == 0)
+			printf("\n  El nombre seleccionado no corresponde con ninguna destilación guardada\n");
+	} while (flag == 0);
+	for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
+	{
+	}
+	printf("\n  Ha seleccionado la destilación ");
+	puts(pro->nombre);
+	do
+	{
+		printf(" OPCIONES");
+		printf("\n==========");
+		printf("\n 1 - Iniciar proceso");
+		printf("\n 2 - Eliminar proceso");
+		printf("\n 3 - Volver a menú principal");
+		printf("\n\n Escoja opción: ");
+		scanf_s("%d", &opcion);
+		if (opcion != 1 || opcion != 2 || opcion != 3)
+			printf("\n Opción no valida\n\n");
+	} while (opcion != 1 || opcion != 2 || opcion != 3);
+	switch (opcion)
+	{
+	case 1:
+		temperaturaselec = (*pro).temperatura;
+		volumenselec = (*pro).volmax;
+		iniciar_pro_automatico(temperaturaselec, volumenselec);
+		break;
+	case 2:
+		eliminar_proceso(seleccionada, pro, cab);
+		break;
+	case 3:
+		break;
+	}
+
+	return cab;
+}
+
+//INICIAR  PROCESO AUTOMÁTICO (inacabada)
+void iniciar_pro_automatico(int temperatura, int volumen)
+{
+
+}
 
