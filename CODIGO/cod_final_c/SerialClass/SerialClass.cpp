@@ -21,7 +21,7 @@ Serial::Serial(char *portName)
         if(GetLastError()==ERROR_FILE_NOT_FOUND){
 
             //Print Error if neccessary
-            printf("ERROR: Handle was not attached. Reason: %s not available.\n", portName);
+            printf("\n\tERROR: Arduino no detectado en la entrada: %s \n\n", portName);
 
         }
         else

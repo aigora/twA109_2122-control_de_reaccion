@@ -33,7 +33,7 @@ float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
 float volumen(float);
-void iniciar_pro_automatico(int temperatura, int volumen); 
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[]);
 void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
@@ -104,14 +104,14 @@ int menu_ppal(void)
 	printf("\n");
 	printf("\t==================================\n");
 	printf("\t\t  MENÚ PRINCIPAL\n");
-	printf("\t==================================\n");
+	printf("\t==================================\n\n");
 	printf("\t1 - Configurar nueva destilación\n");
 	printf("\t2 - Destilaciones preconfiguradas\n");
 	printf("\t3 - Proceso manual\n");
 	printf("\t4 - Prueba funcionamiento\n");
 	printf("\t5 - Guía uso\n");
 	printf("\t6 - Salir\n");
-	printf("\n\t  ELIGE OPCIÓN: ");
+	printf("\n\n\t  ELIGE OPCIÓN: ");
 
 	scanf_s("%d", &opcion);
 	return opcion;
@@ -368,6 +368,7 @@ void prueba_funcionamiento(Serial* Arduino)
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
 {
 	PROCESO* control;
+
 	pro = cab;
 	control = cab;
 	while (strcmp(seleccionada, (*pro).nombre) != 0)
@@ -375,23 +376,17 @@ PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
 		control = pro;
 		pro = pro->siguiente;
 	}
-	if (pro->siguiente == NULL || pro != cab)
-	{
-		control->siguiente = NULL;
-		free(pro);
-		pro = cab;
-	}
-	if (pro == cab)
+
+	if (cab == pro)
 	{
 		cab = pro->siguiente;
-		free(pro);
 	}
-	if (pro->siguiente != NULL || pro != cab)
+	else
 	{
 		control->siguiente = pro->siguiente;
-		free(pro);
-		pro = cab;
 	}
+
+	free(pro);
 	return cab;
 }
 
@@ -428,7 +423,7 @@ void inicio_programa(void)
 	
 	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
 	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
-	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER>\n\n\n");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
 }
@@ -476,14 +471,15 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 	printf("\t==================================\n");
 
 	pro = cab;
-	printf("\n  - Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
+	printf("\n  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
 	puts(pro->nombre);
 	while (pro->siguiente != NULL)
 	{
 		pro = pro->siguiente;
-		printf("\n  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
+		printf("  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
 		puts(pro->nombre);
 	}
+	printf("  _________________________________________________________________________________________________\n\n");
 	scanf_s("%c", &fallo);
 	do
 	{
@@ -499,36 +495,46 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 		} while (pro != NULL);
 
 		if (flag == 0)
-			printf("\n  El nombre seleccionado no corresponde con ninguna destilación guardada\n");
+			printf("\n\tEl nombre seleccionado no corresponde con ninguna destilación guardada\n\n");
 	} while (flag == 0);
 	for (pro = cab; strcmp(seleccionada, (*pro).nombre) != 0; pro = pro->siguiente)
-	{
-	}
-	printf("\n  Ha seleccionado la destilación ");
+	{}
+	system("cls");
+	printf("\n  Ha seleccionado la destilación: ");
 	puts(pro->nombre);
 	do
 	{
-		printf(" OPCIONES");
-		printf("\n==========");
-		printf("\n 1 - Iniciar proceso");
-		printf("\n 2 - Eliminar proceso");
-		printf("\n 3 - Volver a menú principal");
-		printf("\n\n Escoja opción: ");
+		printf("   OPCIONES");
+		printf("\n  ==========");
+		printf("\n  1 - Iniciar proceso");
+		printf("\n  2 - Eliminar proceso");
+		printf("\n  3 - Volver a menú principal");
+		printf("\n\n\t  ELIGE OPCIÓN: ");
 		scanf_s("%d", &opcion);
-		if (opcion != 1 || opcion != 2 || opcion != 3)
+		if (opcion != 1 && opcion != 2 && opcion != 3)
+		{
+			system("cls");
 			printf("\n Opción no valida\n\n");
-	} while (opcion != 1 || opcion != 2 || opcion != 3);
+		}
+	} while (opcion != 1 && opcion != 2 && opcion != 3);
 	switch (opcion)
 	{
 	case 1:
 		temperaturaselec = (*pro).temperatura;
 		volumenselec = (*pro).volmax;
-		iniciar_pro_automatico(temperaturaselec, volumenselec);
+		pro = cab;
+		system("cls");
+		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada);
 		break;
 	case 2:
-		eliminar_proceso(seleccionada, pro, cab);
+		cab = eliminar_proceso(seleccionada, pro, cab);
+		pro = cab;
+		system("cls");
+		printf("\n  Se ha eliminado la destilación con nombre: ");
+		puts(seleccionada);
 		break;
 	case 3:
+		system("cls");
 		break;
 	}
 
@@ -536,8 +542,8 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 }
 
 //INICIAR  PROCESO AUTOMÁTICO (inacabada)
-void iniciar_pro_automatico(int temperatura, int volumen)
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[])
 {
-
+	
 }
 
