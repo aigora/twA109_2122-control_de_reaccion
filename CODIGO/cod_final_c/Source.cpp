@@ -33,19 +33,20 @@ float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
 float volumen(float);
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[]);
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino);
 void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab);
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino);
 void prueba_funcionamiento(Serial* Arduino);
 void inicio_programa(void);
+int p_rap_funcionamiento(Serial* Arduino);
 
 int main(void)
 {
 	Serial* Arduino;
 	char puerto[] = "COM5";
-	int opcion_menu;
+	int opcion_menu, respuesta;
 	char fallo;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
@@ -70,12 +71,28 @@ int main(void)
 				printf("\n  No hay ninguna destilación definida\n");
 			if (cab != NULL)
 			{
-				cab = destilaciones_preconfiguradas(pro, cab);
+				cab = destilaciones_preconfiguradas(pro, cab, Arduino);
 				pro = cab;
 			}
 			break;
 		case 3:
+			system("cls");
+			respuesta = p_rap_funcionamiento(Arduino);
+			if (respuesta == 0)
+			{
+				system("cls");
+				printf("\n\tERROR");
+				printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
+				printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
+				printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+				scanf_s("%c", &fallo);
+				scanf_s("%c", &fallo);
+				system("cls");
+			}
+			else
+			{
 
+			}
 			break;
 		case 4:
 			prueba_funcionamiento(Arduino);
@@ -364,6 +381,27 @@ void prueba_funcionamiento(Serial* Arduino)
 	system("cls");
 }
 
+//PRUEBA RÁPIDA DE SENSORES
+int p_rap_funcionamiento(Serial* Arduino)
+{
+	float distancia, temperatura, funciona;
+	int respuesta = 1;
+
+	distancia = leer_sensor_distancia(Arduino);
+	temperatura = leer_sensor_temperatura(Arduino);
+	funciona = activar_rele(Arduino);
+	funciona = apagar_rele(Arduino);
+
+	if (distancia == -500)
+		respuesta = 0;
+	if (temperatura == -500)
+		respuesta = 0;
+	if (funciona == 0)
+		respuesta = 0;
+
+	return respuesta;
+}
+
 //ELIMINAR PROCESO DE LISTA
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab)
 {
@@ -457,12 +495,13 @@ PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab)
 }
 
 //DESTILACIONES PRECONFIGURADAS (inacabada)
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino)
 {
 	int opcion, flag = 0;
 	char  seleccionada[TAM];
 	int temperaturaselec, volumenselec;
 	char fallo;
+	int respuesta;
 
 	system("cls");
 	printf("\n");
@@ -524,7 +563,22 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 		volumenselec = (*pro).volmax;
 		pro = cab;
 		system("cls");
-		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada);
+		respuesta = p_rap_funcionamiento(Arduino);
+		if (respuesta == 0)
+		{
+			system("cls");
+			printf("\n\tERROR");
+			printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
+			printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
+			printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+			scanf_s("%c", &fallo);
+			scanf_s("%c", &fallo);
+			system("cls");
+		}
+		else
+		{
+		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada, Arduino);
+		}
 		break;
 	case 2:
 		cab = eliminar_proceso(seleccionada, pro, cab);
@@ -542,8 +596,9 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 }
 
 //INICIAR  PROCESO AUTOMÁTICO (inacabada)
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[])
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino)
 {
 	
 }
+
 
