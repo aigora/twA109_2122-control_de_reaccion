@@ -78,7 +78,9 @@ int main(void)
 			break;
 		case 3:
 			system("cls");
+			printf("\n\n\n\t\tCARGANDO...");
 			respuesta = p_rap_funcionamiento(Arduino);
+			system("cls");
 			if (respuesta == 0)
 			{
 				system("cls");
@@ -351,15 +353,18 @@ void prueba_funcionamiento(Serial* Arduino)
 	float distancia, temperatura, funciona;
 
 	system("cls");
-	printf("\n");
-	printf("\t================================\n");
-	printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
-	printf("\t================================\n");
+	printf("\n\n\n\t\tCARGANDO...");
 	
 	distancia = leer_sensor_distancia(Arduino);
 	temperatura = leer_sensor_temperatura(Arduino);
 	funciona = activar_rele(Arduino);
 	funciona = apagar_rele(Arduino);
+
+	system("cls");
+	printf("\n");
+	printf("\t================================\n");
+	printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
+	printf("\t================================\n");
 
 	if (distancia == -500)
 		printf("\n  Error en el sensor de distancia\n");
@@ -564,7 +569,9 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		volumenselec = (*pro).volmax;
 		pro = cab;
 		system("cls");
+		printf("\n\n\n\t\tCARGANDO...");
 		respuesta = p_rap_funcionamiento(Arduino);
+		system("cls");
 		if (respuesta == 0)
 		{
 			system("cls");
