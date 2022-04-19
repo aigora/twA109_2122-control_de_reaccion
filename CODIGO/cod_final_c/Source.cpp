@@ -41,6 +41,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 void prueba_funcionamiento(Serial* Arduino);
 void inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
+void proceso_manual(void);
 
 int main(void)
 {
@@ -81,7 +82,7 @@ int main(void)
 			if (respuesta == 0)
 			{
 				system("cls");
-				printf("\n\tERROR");
+				printf("\n\tERROR\n");
 				printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
 				printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
 				printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
@@ -91,7 +92,7 @@ int main(void)
 			}
 			else
 			{
-
+				proceso_manual();
 			}
 			break;
 		case 4:
@@ -375,7 +376,7 @@ void prueba_funcionamiento(Serial* Arduino)
 	if (funciona == 1)
 		printf("\n  El relé que activa la placa calentadora funciona correctamente\n");
 
-	printf("\n\n\tPULSE <ENTER>");
+	printf("\n\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
@@ -448,7 +449,7 @@ void guia(void)
 	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen de destilado que se vaya obteniendo,\n pudiendo acabar el proceso cuando desee.\n\n");
 	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
 	printf(" Para salir del programa, elija la opción '6'.\n\n\n");
-	printf("\n\tPULSE <ENTER>");
+	printf("\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
@@ -487,14 +488,14 @@ PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab)
 	scanf_s("%d", &cab->volmax);
 	printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como: ", (*cab).temperatura, (*cab).volmax);
 	puts(cab->nombre);
-	printf("\n\tPULSE <ENTER>");
+	printf("\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
 	return cab;
 }
 
-//DESTILACIONES PRECONFIGURADAS (inacabada)
+//DESTILACIONES PRECONFIGURADAS 
 PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino)
 {
 	int opcion, flag = 0;
@@ -567,7 +568,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		if (respuesta == 0)
 		{
 			system("cls");
-			printf("\n\tERROR");
+			printf("\n\tERROR\n");
 			printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
 			printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
 			printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
@@ -593,6 +594,12 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 	}
 
 	return cab;
+}
+
+//PROCESO MANUAL (inacabada)
+void proceso_manual(void)
+{
+
 }
 
 //INICIAR  PROCESO AUTOMÁTICO (inacabada)
