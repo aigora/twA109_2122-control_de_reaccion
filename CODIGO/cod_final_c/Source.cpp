@@ -33,19 +33,21 @@ float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
 float volumen(float);
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[]);
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino);
 void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab);
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino);
 void prueba_funcionamiento(Serial* Arduino);
 void inicio_programa(void);
+int p_rap_funcionamiento(Serial* Arduino);
+void proceso_manual(void);
 
 int main(void)
 {
 	Serial* Arduino;
 	char puerto[] = "COM5";
-	int opcion_menu;
+	int opcion_menu, respuesta;
 	char fallo;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
@@ -70,12 +72,30 @@ int main(void)
 				printf("\n  No hay ninguna destilación definida\n");
 			if (cab != NULL)
 			{
-				cab = destilaciones_preconfiguradas(pro, cab);
+				cab = destilaciones_preconfiguradas(pro, cab, Arduino);
 				pro = cab;
 			}
 			break;
 		case 3:
-
+			system("cls");
+			printf("\n\n\n\t\tCARGANDO...");
+			respuesta = p_rap_funcionamiento(Arduino);
+			system("cls");
+			if (respuesta == 0)
+			{
+				system("cls");
+				printf("\n\tERROR\n");
+				printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
+				printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
+				printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+				scanf_s("%c", &fallo);
+				scanf_s("%c", &fallo);
+				system("cls");
+			}
+			else
+			{
+				proceso_manual();
+			}
 			break;
 		case 4:
 			prueba_funcionamiento(Arduino);
@@ -333,15 +353,18 @@ void prueba_funcionamiento(Serial* Arduino)
 	float distancia, temperatura, funciona;
 
 	system("cls");
-	printf("\n");
-	printf("\t================================\n");
-	printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
-	printf("\t================================\n");
+	printf("\n\n\n\t\tCARGANDO...");
 	
 	distancia = leer_sensor_distancia(Arduino);
 	temperatura = leer_sensor_temperatura(Arduino);
 	funciona = activar_rele(Arduino);
 	funciona = apagar_rele(Arduino);
+
+	system("cls");
+	printf("\n");
+	printf("\t================================\n");
+	printf("\t    PRUEBA DE FUNCIONAMIENTO\n");
+	printf("\t================================\n");
 
 	if (distancia == -500)
 		printf("\n  Error en el sensor de distancia\n");
@@ -358,10 +381,31 @@ void prueba_funcionamiento(Serial* Arduino)
 	if (funciona == 1)
 		printf("\n  El relé que activa la placa calentadora funciona correctamente\n");
 
-	printf("\n\n\tPULSE <ENTER>");
+	printf("\n\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
+}
+
+//PRUEBA RÁPIDA DE SENSORES
+int p_rap_funcionamiento(Serial* Arduino)
+{
+	float distancia, temperatura, funciona;
+	int respuesta = 1;
+
+	distancia = leer_sensor_distancia(Arduino);
+	temperatura = leer_sensor_temperatura(Arduino);
+	funciona = activar_rele(Arduino);
+	funciona = apagar_rele(Arduino);
+
+	if (distancia == -500)
+		respuesta = 0;
+	if (temperatura == -500)
+		respuesta = 0;
+	if (funciona == 0)
+		respuesta = 0;
+
+	return respuesta;
 }
 
 //ELIMINAR PROCESO DE LISTA
@@ -410,7 +454,7 @@ void guia(void)
 	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen de destilado que se vaya obteniendo,\n pudiendo acabar el proceso cuando desee.\n\n");
 	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
 	printf(" Para salir del programa, elija la opción '6'.\n\n\n");
-	printf("\n\tPULSE <ENTER>");
+	printf("\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
@@ -449,20 +493,21 @@ PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab)
 	scanf_s("%d", &cab->volmax);
 	printf("\n  Destilación a %dCº y %dml de volumen objetivo se ha guardado como: ", (*cab).temperatura, (*cab).volmax);
 	puts(cab->nombre);
-	printf("\n\tPULSE <ENTER>");
+	printf("\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
 	return cab;
 }
 
-//DESTILACIONES PRECONFIGURADAS (inacabada)
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
+//DESTILACIONES PRECONFIGURADAS 
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino)
 {
 	int opcion, flag = 0;
 	char  seleccionada[TAM];
 	int temperaturaselec, volumenselec;
 	char fallo;
+	int respuesta;
 
 	system("cls");
 	printf("\n");
@@ -524,7 +569,24 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 		volumenselec = (*pro).volmax;
 		pro = cab;
 		system("cls");
-		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada);
+		printf("\n\n\n\t\tCARGANDO...");
+		respuesta = p_rap_funcionamiento(Arduino);
+		system("cls");
+		if (respuesta == 0)
+		{
+			system("cls");
+			printf("\n\tERROR\n");
+			printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
+			printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
+			printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+			scanf_s("%c", &fallo);
+			scanf_s("%c", &fallo);
+			system("cls");
+		}
+		else
+		{
+		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada, Arduino);
+		}
 		break;
 	case 2:
 		cab = eliminar_proceso(seleccionada, pro, cab);
@@ -541,9 +603,16 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab)
 	return cab;
 }
 
+//PROCESO MANUAL (inacabada)
+void proceso_manual(void)
+{
+
+}
+
 //INICIAR  PROCESO AUTOMÁTICO (inacabada)
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[])
+void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino)
 {
 	
 }
+
 
