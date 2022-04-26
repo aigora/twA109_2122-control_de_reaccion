@@ -5,7 +5,7 @@
 #include <locale.h>
 #include <conio.h>
 #include "SerialClass/SerialClass.h"
-#include<math.h>
+#include <math.h>
 
 #define MAX_BUFFER 200
 #define PAUSA_MS 200
@@ -66,7 +66,7 @@ int main(void)
 			cab = conf_nueva_destilacion(pro, cab);
 			pro = cab;
 			break;
-		case 2:  //inacabado
+		case 2: 
 			if (cab == NULL)
 				system("cls");
 				printf("\n  No hay ninguna destilación definida\n");
@@ -603,16 +603,28 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 	return cab;
 }
 
-//PROCESO MANUAL (inacabada)
+//PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
 void proceso_manual(void)
 {
+	//hay que crar dos vectores para guardar los datos del volumen y la temperatura (sa amplian la memoria con "malloc" y "realloc")
 
 }
 
-//INICIAR  PROCESO AUTOMÁTICO (inacabada)
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino)
+//INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
+void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
 {
-	
+	char tecla;
+	//hay que crar dos vectores para guardar los datos del volumen y la temperatura (sa amplian la memoria con "malloc" y "realloc")
+
+	do
+	{
+
+
+		//Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
+
+
+	} while (_kbhit() == 0);
+	tecla = _getch();
 }
 
 
