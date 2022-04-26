@@ -42,6 +42,7 @@ void prueba_funcionamiento(Serial* Arduino);
 void inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
 void proceso_manual(void);
+int arreglo_opcion(void);
 
 int main(void)
 {
@@ -61,7 +62,6 @@ int main(void)
 		switch (opcion_menu)
 		{
 		case 1:
-			scanf_s("%c", &fallo);
 			system("cls");
 			cab = conf_nueva_destilacion(pro, cab);
 			pro = cab;
@@ -88,7 +88,6 @@ int main(void)
 				printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
 				printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
 				printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
-				scanf_s("%c", &fallo);
 				scanf_s("%c", &fallo);
 				system("cls");
 			}
@@ -132,8 +131,8 @@ int menu_ppal(void)
 	printf("\t5 - Guía uso\n");
 	printf("\t6 - Salir\n");
 	printf("\n\n\t  ELIGE OPCIÓN: ");
-
-	scanf_s("%d", &opcion);
+	opcion = arreglo_opcion();
+	
 	return opcion;
 }
 
@@ -383,7 +382,6 @@ void prueba_funcionamiento(Serial* Arduino)
 
 	printf("\n\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
-	scanf_s("%c", &fallo);
 	system("cls");
 }
 
@@ -440,7 +438,7 @@ void guia(void)
 	char fallo;
 
 	system("cls");
-	printf("\t==================================\n");
+	printf("\n\t==================================\n");
 	printf("\t\t  GUÍA DE USO\n");
 	printf("\t==================================\n\n");
 	printf(" Este programa de destilación monitorizada a tiempo real permite configurar nuevas destilaciones automáticas,\n");
@@ -455,7 +453,6 @@ void guia(void)
 	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
 	printf(" Para salir del programa, elija la opción '6'.\n\n\n");
 	printf("\n\tPULSE <ENTER> ");
-	scanf_s("%c", &fallo);
 	scanf_s("%c", &fallo);
 	system("cls");
 }
@@ -525,7 +522,6 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		puts(pro->nombre);
 	}
 	printf("  _________________________________________________________________________________________________\n\n");
-	scanf_s("%c", &fallo);
 	do
 	{
 		printf("  Seleccione destilación escribiendo el nombre de la deseada: ");
@@ -555,7 +551,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		printf("\n  2 - Eliminar proceso");
 		printf("\n  3 - Volver a menú principal");
 		printf("\n\n\t  ELIGE OPCIÓN: ");
-		scanf_s("%d", &opcion);
+		opcion = arreglo_opcion();
 		if (opcion != 1 && opcion != 2 && opcion != 3)
 		{
 			system("cls");
@@ -580,7 +576,6 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 			printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
 			printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
 			scanf_s("%c", &fallo);
-			scanf_s("%c", &fallo);
 			system("cls");
 		}
 		else
@@ -601,6 +596,24 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 	}
 
 	return cab;
+}
+
+//ARREGLO DE ERRORES DE MENÚ
+int arreglo_opcion(void)
+{
+	int opcion;
+	char escrito[100];
+	fgets(escrito, 100, stdin);
+	if (escrito[0] >= '0' && escrito[0] < '9')
+	{
+		opcion = escrito[0] - '0';
+	}
+	else
+	{
+		opcion = 9;
+	}
+
+	return opcion;
 }
 
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
@@ -626,5 +639,4 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 	} while (_kbhit() == 0);
 	tecla = _getch();
 }
-
 
