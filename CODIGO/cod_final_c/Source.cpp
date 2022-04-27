@@ -23,12 +23,12 @@ struct nodo
 typedef struct nodo PROCESO;
 
 int menu_ppal(void);
+void errror_conexion(void);
 float leer_sensor_distancia(Serial* Arduino);
 float float_from_cadena(char* cadena);
 int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_recibir);
 void monitorizar_sensor_distancia(Serial* Arduino);
 void monitorizar_sensor_temperatura(Serial* Arduino);
-void medicion_unica_temp(Serial* Arduino);
 float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
@@ -43,6 +43,7 @@ void inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
 void proceso_manual(void);
 int arreglo_opcion(void);
+void final_programa(void);
 
 int main(void)
 {
@@ -83,13 +84,7 @@ int main(void)
 			system("cls");
 			if (respuesta == 0)
 			{
-				system("cls");
-				printf("\n\tERROR\n");
-				printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
-				printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
-				printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
-				scanf_s("%c", &fallo);
-				system("cls");
+				errror_conexion();
 			}
 			else
 			{
@@ -103,8 +98,7 @@ int main(void)
 			guia();
 			break;
 		case 6:
-			system("cls");
-			printf("\n\n\n\n\t\t\t\tFIN DE PROGRAMA\n\n\n\n");
+			final_programa();
 			break;
 		default: 
 			system("cls");
@@ -134,6 +128,20 @@ int menu_ppal(void)
 	opcion = arreglo_opcion();
 	
 	return opcion;
+}
+
+//MENSAJE ERROR POR CONEXIÓN CON ARDUINO
+void errror_conexion(void)
+{
+	char fallo;
+
+	system("cls");
+	printf("\n\tERROR\n");
+	printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
+	printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+	scanf_s("%c", &fallo);
+	system("cls");
 }
 
 //LEER SENSOR ULTRASONIDO
@@ -285,66 +293,6 @@ int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_
 	return total;
 }
 
-//MONITORIZAR SENSOR DISTANCIA
-void monitorizar_sensor_distancia(Serial* Arduino)
-{
-	float frecuencia, distancia;
-	char tecla;
-	do
-	{
-		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
-		scanf_s("%f", &frecuencia);
-	} while (frecuencia < 0.5 || frecuencia>2.0);
-	printf("Pulse una tecla para finalizar la monitorización\n");
-	do
-	{
-		if (Arduino->IsConnected())
-		{
-			distancia = leer_sensor_distancia(Arduino);
-			if (distancia != -1)
-				printf("%.2f ", distancia);
-			else
-				printf("XXX ");
-		}
-		else
-			printf("\nNo se ha podido conectar con Arduino.\n");
-		if ((1 / frecuencia) * 1000 > PAUSA_MS)
-			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
-	} while (_kbhit() == 0);
-	tecla = _getch();
-	return;
-}
-
-//MONITORIZAR SENSOR TEMPERATURA
-void monitorizar_sensor_temperatura(Serial* Arduino)
-{
-	float frecuencia, temperatura;
-	char tecla;
-	do
-	{
-		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
-		scanf_s("%f", &frecuencia);
-	} while (frecuencia < 0.5 || frecuencia>2.0);
-	printf("Pulse una tecla para finalizar la monitorización\n");
-	do
-	{
-		if (Arduino->IsConnected())
-		{
-			temperatura = leer_sensor_temperatura(Arduino);
-			if (temperatura != -1)
-				printf("%.2f ", temperatura);
-			else
-				printf("XXX ");
-		}
-		else
-			printf("\nNo se ha podido conectar con Arduino.\n");
-		if ((1 / frecuencia) * 1000 > PAUSA_MS)
-			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
-	} while (_kbhit() == 0);
-	tecla = _getch();
-	return;
-}
-
 //PRUEBA FUCIONAMIENTO
 void prueba_funcionamiento(Serial* Arduino)
 {
@@ -444,27 +392,16 @@ void guia(void)
 	printf(" Este programa de destilación monitorizada a tiempo real permite configurar nuevas destilaciones automáticas,\n");
 	printf(" comenzar un proceso manual (controlando la temperatura y el volumen final deseado) o hacer pruebas del funcionamiento\n del mismo.\n\n");
 	printf(" Para configurar nuevas destilaciones, elija la opción '1'. Después, escriba el nombre de la destilación deseada,\n");
-	printf(" seguido de la temperatura de ebullición del líquido a destilar, y el volumen de destilado que busca obtener.\n Esta destilación se guardará en la memoria del programa.\n\n");
+	printf(" seguido de la temperatura de ebullición del líquido a destilar, y el volumen de destilado que busca obtener.\n Esta destilación se guardará en la memoria del programa y, en caso de así desearlo, en un archivo del ordenador.\n\n");
 	printf(" Para acceder a destilaciones preconfiguradas, pulse '2'.Le aparecerán todas las destilaciones que usted haya\n");
 	printf(" configurado previamente. Para seleccionar una destilación, escriba el nombre de la misma y posteriormente, pulse '1'\n");
 	printf(" si desea comenzar el proceso de destilación, '2' en caso de que quiera borrarla de la memoria del programa, o '3' para\n volver al menú principal.\n\n");
 	printf(" Para realizar un proceso manual, pulse '3'. Podrá activar y desactivar el calentador, y se le mostrará a tiempo real\n");
 	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen de destilado que se vaya obteniendo,\n pudiendo acabar el proceso cuando desee.\n\n");
 	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
-	printf(" Para salir del programa, elija la opción '6'.\n\n\n");
-	printf("\n\tPULSE <ENTER> ");
-	scanf_s("%c", &fallo);
-	system("cls");
-}
-
-//PANTALLA INICIO PROGRAMA
-void inicio_programa(void)
-{
-	char fallo;
-	
-	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
-	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
-	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+	printf(" Para salir del programa, elija la opción '6'.\n");
+	printf(" (El volumen y la temperatura final de las destilaciones se guerdará en una carpeta)\n");
+	printf("\n\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
 }
@@ -570,13 +507,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		system("cls");
 		if (respuesta == 0)
 		{
-			system("cls");
-			printf("\n\tERROR\n");
-			printf("\n\tNo se puede comenzar el proceso debido a que no todos los componentes\n\testán conectados o alguno no funciona correctamente");
-			printf("\n\n\tRealize una prueba de funcionamiento (Op.4) para localizar el fallo");
-			printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
-			scanf_s("%c", &fallo);
-			system("cls");
+			errror_conexion();
 		}
 		else
 		{
@@ -616,10 +547,85 @@ int arreglo_opcion(void)
 	return opcion;
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------------PENDIENTES------------------------------------------------------------------
+
+//PANTALLA INICIO PROGRAMA (Hay que añadir la opción de cargar los datos)
+void inicio_programa(void)
+{
+	char fallo;
+	int opcion;
+
+	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
+	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+	scanf_s("%c", &fallo);
+	system("cls");
+
+	do
+	{
+		printf("\n   ¿DESEA CARGAR LOS DATOS DE DESTILACIONES PRECONFIGURADAS ANTERIORES?");
+		printf("\n  ======================================================================\n");
+		printf("\n  1 - Si");
+		printf("\n  2 - No");
+		printf("\n\n\t  ELIGE OPCIÓN: ");
+		opcion = arreglo_opcion();
+		if (opcion != 1 && opcion != 2)
+		{
+			system("cls");
+			printf("\n  Opción no valida\n");
+		}
+	} while (opcion != 1 && opcion != 2);
+	switch (opcion)
+	{
+	case 1:
+		//inacabada
+		system("cls");
+		break;
+	case 2:
+		system("cls");
+		printf("\n  No se han cargado los datos de destilaciones preconfiguradas anteriores\n");
+		break;
+	}
+}
+
+//PANTALLA FINAL PROGRAMA (Hay que añadir la opción de guardar los datos)
+void final_programa(void)
+{
+	int opcion;
+
+	system("cls");
+	do
+	{
+		printf("\n   ¿DESEA GUARDAR LOS DATOS DE LAS DESTILACIONES PRECONFIGURADAS?");
+		printf("\n  ================================================================\n");
+		printf("\n  1 - Si");
+		printf("\n  2 - No");
+		printf("\n\n\t  ELIGE OPCIÓN: ");
+		opcion = arreglo_opcion();
+		if (opcion != 1 && opcion != 2)
+		{
+			system("cls");
+			printf("\n  Opción no valida\n");
+		}
+	} while (opcion != 1 && opcion != 2);
+	switch (opcion)
+	{
+	case 1:
+		//inacabada
+		system("cls");
+		break;
+	case 2:
+		system("cls");
+		printf("\n  No se han guardado los datos de las destilaciones preconfiguradas\n");
+		break;
+	}
+	printf("\n\n\n\n\t\t\t\tFIN DE PROGRAMA\n\n\n\n");
+}
+
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
 void proceso_manual(void)
 {
-	//hay que crar dos vectores para guardar los datos del volumen y la temperatura (sa amplian la memoria con "malloc" y "realloc")
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
 }
 
@@ -627,7 +633,7 @@ void proceso_manual(void)
 void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
 {
 	char tecla;
-	//hay que crar dos vectores para guardar los datos del volumen y la temperatura (sa amplian la memoria con "malloc" y "realloc")
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
 	do
 	{
@@ -638,5 +644,65 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 
 	} while (_kbhit() == 0);
 	tecla = _getch();
+}
+
+//MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
+void monitorizar_sensor_distancia(Serial* Arduino)
+{
+	float frecuencia, distancia;
+	char tecla;
+	do
+	{
+		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
+		scanf_s("%f", &frecuencia);
+	} while (frecuencia < 0.5 || frecuencia>2.0);
+	printf("Pulse una tecla para finalizar la monitorización\n");
+	do
+	{
+		if (Arduino->IsConnected())
+		{
+			distancia = leer_sensor_distancia(Arduino);
+			if (distancia != -1)
+				printf("%.2f ", distancia);
+			else
+				printf("XXX ");
+		}
+		else
+			printf("\nNo se ha podido conectar con Arduino.\n");
+		if ((1 / frecuencia) * 1000 > PAUSA_MS)
+			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
+	} while (_kbhit() == 0);
+	tecla = _getch();
+	return;
+}
+
+//MONITORIZAR SENSOR TEMPERATURA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
+void monitorizar_sensor_temperatura(Serial* Arduino)
+{
+	float frecuencia, temperatura;
+	char tecla;
+	do
+	{
+		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
+		scanf_s("%f", &frecuencia);
+	} while (frecuencia < 0.5 || frecuencia>2.0);
+	printf("Pulse una tecla para finalizar la monitorización\n");
+	do
+	{
+		if (Arduino->IsConnected())
+		{
+			temperatura = leer_sensor_temperatura(Arduino);
+			if (temperatura != -1)
+				printf("%.2f ", temperatura);
+			else
+				printf("XXX ");
+		}
+		else
+			printf("\nNo se ha podido conectar con Arduino.\n");
+		if ((1 / frecuencia) * 1000 > PAUSA_MS)
+			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
+	} while (_kbhit() == 0);
+	tecla = _getch();
+	return;
 }
 
