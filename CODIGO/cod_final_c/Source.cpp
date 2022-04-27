@@ -619,7 +619,10 @@ void final_programa(void)
 		printf("\n  No se han guardado los datos de las destilaciones preconfiguradas\n");
 		break;
 	}
-	printf("\n\n\n\n\t\t\t\tFIN DE PROGRAMA\n\n\n\n");
+	printf("\n\n\n\n\t\t\t   ==== FIN DE PROGRAMA ====\n\n\n\n");
+
+	printf("\n\n\n\t\t\t    <PULSE CUALQUIER TECLA> ");
+	while (_kbhit() == 0){}
 }
 
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
@@ -632,7 +635,6 @@ void proceso_manual(void)
 //INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
 void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
 {
-	char tecla;
 	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
 	do
@@ -643,7 +645,6 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 
 
 	} while (_kbhit() == 0);
-	tecla = _getch();
 }
 
 //MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)

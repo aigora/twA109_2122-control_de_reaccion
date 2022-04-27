@@ -21,12 +21,12 @@ Serial::Serial(char *portName)
         if(GetLastError()==ERROR_FILE_NOT_FOUND){
 
             //Print Error if neccessary
-            printf("\n\tERROR: Arduino no detectado en la entrada: %s \n\n", portName);
+            printf("\n\tERROR: Arduino no detectado en la entrada <%s> \n\n", portName);
 
         }
         else
         {
-            printf("ERROR!!!");
+            printf("\n\tERROR!!! \n\n");
         }
     }
     else
@@ -38,7 +38,7 @@ Serial::Serial(char *portName)
         if (!GetCommState(this->hSerial, &dcbSerialParams))
         {
             //If impossible, show an error
-            printf("failed to get current serial parameters!");
+            printf("\n\tfailed to get current serial parameters! \n\n");
         }
         else
         {
@@ -51,7 +51,7 @@ Serial::Serial(char *portName)
              //Set the parameters and check for their proper application
              if(!SetCommState(hSerial, &dcbSerialParams))
              {
-                printf("ALERT: Could not set Serial Port parameters");
+                printf("\n\tALERT: Could not set Serial Port parameters \n\n");
              }
              else
              {
