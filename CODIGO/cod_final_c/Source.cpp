@@ -11,7 +11,7 @@
 #define PAUSA_MS 200
 #define TAM 20
 #define RADIO 3
-#define ALTURA 6
+#define ALTURA 60
 
 struct nodo
 {
@@ -41,7 +41,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 void prueba_funcionamiento(Serial* Arduino);
 void inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
-void proceso_manual(void);
+void proceso_manual(Serial* Arduino);
 int arreglo_opcion(void);
 void final_programa(void);
 
@@ -88,7 +88,7 @@ int main(void)
 			}
 			else
 			{
-				proceso_manual();
+				proceso_manual(Arduino);
 			}
 			break;
 		case 4:
@@ -160,6 +160,7 @@ float leer_sensor_distancia(Serial* Arduino)
 	{
 		distancia = float_from_cadena(mensaje_recibido);
 	}
+	
 	return distancia;
 }
 
@@ -188,8 +189,10 @@ float volumen(float distancia)
 	float pi = acos(-1.0);
 	float h;
 
-	h = ALTURA - distancia;
-	vol = (float)(h * pi * RADIO * RADIO);
+	h = (float)(ALTURA - distancia)/10; // dividimos entre 10 para pasar la unidad a cm
+	vol = (float)(h * pi * RADIO * RADIO); //volumen en mililirtos(centimetros cubicos)
+	if (distancia > ALTURA)
+		vol = 0;
 
 	return vol;
 }
@@ -230,7 +233,7 @@ float float_from_cadena(char* cadena)
 	int i;
 	int estado = 0;
 	float numero = 0, divisor = 10;
-	for (i = 0; cadena[i] != '\n'; i++)
+	for (i = 0; cadena[i]!='\0'; i++)
 	{
 		switch (estado)
 		{
@@ -626,8 +629,14 @@ void final_programa(void)
 }
 
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
-void proceso_manual(void)
+void proceso_manual(Serial* Arduino)
 {
+	float vol;
+	vol = leer_sensor_distancia(Arduino);
+	vol = volumen(vol);
+	printf("%.2f ml", vol);
+	
+	
 	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
 }

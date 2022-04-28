@@ -29,9 +29,11 @@ void loop ()
          mensaje_entrada = Serial.readStringUntil('\n');
         if (mensaje_entrada.compareTo("GET_DISTANCIA")==0) //ultrasonido
         {
-                  float cm = ping(TriggerPin, EchoPin);
-                  Serial.println(cm);
-                  mensaje_salida=String("DISTANCIA="+String(cm,3));
+                  long mm = ping(TriggerPin, EchoPin);// Función para calcular la distancia
+                   // Y la mostramos por el puerto serie
+                  
+                  mensaje_salida=String("DISTANCIA="+String(mm));
+                  Serial.print("mm");
         }
         if (mensaje_entrada.compareTo("GET_TEMPERATURA")==0) //temperatura
         {
@@ -58,9 +60,9 @@ void loop ()
      }
 }
 
-float ping(int TriggerPin, int EchoPin) //funcion ultra
+long ping(int TriggerPin, int EchoPin) //funcion ultra
 {
-   long duration, distanceCm;
+   long Duration, distance_mm;
     
    digitalWrite(TriggerPin, LOW); // Para generar un pulso limpio ponemos a LOW 4us.
    delayMicroseconds(4);
@@ -68,8 +70,19 @@ float ping(int TriggerPin, int EchoPin) //funcion ultra
    delayMicroseconds(10);
    digitalWrite(TriggerPin, LOW);
     
-   duration = pulseIn(EchoPin, HIGH); // Medimos el tiempo entre pulsos, en us.
+   Duration = pulseIn(EchoPin, HIGH); // Medimos el tiempo entre pulsos, en us.
     
-   distanceCm = duration * 10 / 292/ 2; // Convertimos a distancia en cm.
-   return distanceCm;
+   long Distancia_mm = fDistancia(Duration); // Función para calcular la distancia
+   return Distancia_mm;
+}
+
+// Función para calcular la distancia
+long fDistancia(long tiempo)
+{
+// Calculamos la distancia en mm
+// ((tiempo)*(Velocidad del sonido)/ el camino se hace dos veces) 
+
+long DistanceCalc; // Variable para los cálculos
+DistanceCalc = (tiempo /2.9) / 2; // Cálculos en milímetros
+return DistanceCalc;
 }
