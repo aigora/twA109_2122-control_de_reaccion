@@ -638,13 +638,18 @@ void proceso_manual(Serial* Arduino)
 //INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
 void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
 {
-
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 	float temperatura;
 	float vol;
 	float distancia;
 	char fallo;
-	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
-
+	
+	printf("\t==================================\n");
+	printf("\t  PROCESO AUTOMÁTICO \n");
+	printf("\t==================================\n\n");
+	
+	printf("El proceso terminará cuando presiones cualquier tecla o cuando se llegue al volumen deseado");
+	
 	do //Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
 	{
 		
@@ -656,9 +661,16 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 		{
 			apagar_rele(Arduino);
 		}
-		else
+		if (temperatura = temperaturaselec + 1 && vol < volumenselec)
 		{
 			activar_rele(Arduino);
+		}
+
+		if (vol >= volumenselec)
+		{
+			printf("Se ha llegado al volumen deseado");
+			scanf_s("%c", &fallo);
+			system("cls");
 		}
 
 		printf("%.2f ml   %.2f ºC \n", vol, temperatura);
@@ -667,14 +679,7 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 		
 
 	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
-	printf("\n\nPULSE <ENTER> PARA VER ÚLTIMOS DATOS");
-	scanf_s("%c", &fallo);  //Una vez reciba un dato y lo almacene se procede a borrar la pantalla
-	system("cls");
 
-	printf("\n\t ÚLTIMOS DATOS TOMADOS \n");
-	printf("---------------------------------- \n");
-	printf("%.2f ml   %.2f ºC \n", vol, temperatura);
-	
 }
 
 //MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
