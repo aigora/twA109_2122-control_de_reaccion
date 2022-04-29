@@ -39,11 +39,11 @@ PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
 PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino);
 void prueba_funcionamiento(Serial* Arduino);
-void inicio_programa(void);
+int inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
 void proceso_manual(Serial* Arduino);
 int arreglo_opcion(void);
-void final_programa(void);
+void final_programa(int formatrabajo);
 
 int main(void)
 {
@@ -51,12 +51,13 @@ int main(void)
 	char puerto[] = "COM5";
 	int opcion_menu, respuesta;
 	char fallo;
+	int formatrabajo;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
 
 	setlocale(LC_ALL, "es-ES");
 	Arduino = new Serial((char*)puerto);
-	inicio_programa();
+	formatrabajo = inicio_programa();
 	do
 	{
 		opcion_menu = menu_ppal();
@@ -98,7 +99,7 @@ int main(void)
 			guia();
 			break;
 		case 6:
-			final_programa();
+			final_programa(formatrabajo);
 			break;
 		default: 
 			system("cls");
@@ -553,10 +554,11 @@ int arreglo_opcion(void)
 //--------------------------------------------------------------------------------------------------------------------------------------------PENDIENTES------------------------------------------------------------------
 
 //PANTALLA INICIO PROGRAMA (Hay que añadir la opción de cargar los datos)
-void inicio_programa(void)
+int inicio_programa(void)
 {
 	char fallo;
 	int opcion;
+	int formatrabajo;
 
 	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
 	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
@@ -566,10 +568,10 @@ void inicio_programa(void)
 
 	do
 	{
-		printf("\n   ¿DESEA CARGAR LOS DATOS DE DESTILACIONES PRECONFIGURADAS ANTERIORES?");
-		printf("\n  ======================================================================\n");
-		printf("\n  1 - Si");
-		printf("\n  2 - No");
+		printf("\n   ¿CÓMO DESEA TRABAJAR?");
+		printf("\n  =======================\n");
+		printf("\n  1 - Cargando y almacenando las destilaciones preconfiguradas en la memoria");
+		printf("\n  2 - Sin guardar ni cargar datos de las destilaciones preconfiguradas");
 		printf("\n\n\t  ELIGE OPCIÓN: ");
 		opcion = arreglo_opcion();
 		if (opcion != 1 && opcion != 2)
@@ -583,41 +585,30 @@ void inicio_programa(void)
 	case 1:
 		//inacabada
 		system("cls");
+		formatrabajo = 1;
 		break;
 	case 2:
 		system("cls");
-		printf("\n  No se han cargado los datos de destilaciones preconfiguradas anteriores\n");
+		formatrabajo = 0;
+		printf("\n  La aplicación está trabajando sin recurrir a la memoria del ordenador\n");
 		break;
 	}
+	return formatrabajo;
 }
 
 //PANTALLA FINAL PROGRAMA (Hay que añadir la opción de guardar los datos)
-void final_programa(void)
+void final_programa(int formatrabajo)
 {
-	int opcion;
-
 	system("cls");
-	do
-	{
-		printf("\n   ¿DESEA GUARDAR LOS DATOS DE LAS DESTILACIONES PRECONFIGURADAS?");
-		printf("\n  ================================================================\n");
-		printf("\n  1 - Si");
-		printf("\n  2 - No");
-		printf("\n\n\t  ELIGE OPCIÓN: ");
-		opcion = arreglo_opcion();
-		if (opcion != 1 && opcion != 2)
-		{
-			system("cls");
-			printf("\n  Opción no valida\n");
-		}
-	} while (opcion != 1 && opcion != 2);
-	switch (opcion)
+
+	switch (formatrabajo)
 	{
 	case 1:
 		//inacabada
 		system("cls");
+		printf("\n  Se han guardado los datos de las destilaciones preconfiguradas\n");
 		break;
-	case 2:
+	case 0:
 		system("cls");
 		printf("\n  No se han guardado los datos de las destilaciones preconfiguradas\n");
 		break;

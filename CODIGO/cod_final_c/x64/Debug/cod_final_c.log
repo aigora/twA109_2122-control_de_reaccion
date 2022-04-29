@@ -1,37 +1,37 @@
 ﻿  Source.cpp
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(53,7): warning C4101: 'fallo': variable local sin referencia
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(143,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(143,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(143,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(143,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(189,11): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(243,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(278,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(310,25): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(311,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(335,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(335,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(335,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(335,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(347,25): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(348,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(408,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(408,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(408,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(408,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(434,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(434,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(434,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(434,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(446,7): warning C4101: 'fallo': variable local sin referencia
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(564,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(564,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(564,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(564,10): message : este argumento se utiliza como un tamaño de búfer
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(683,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(713,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-  cod_final_C.vcxproj -> C:\Users\David\Documents\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\x64\Debug\cod_final_C.exe
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(53,7): warning C4101: 'fallo': variable local sin referencia
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(144,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(144,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(144,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(144,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(190,11): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(244,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(279,66): warning C4267: 'argumento': conversión de 'size_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(311,25): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(312,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(336,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(336,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(336,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(336,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(348,25): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(349,24): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(409,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(409,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(409,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(409,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(435,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(436,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(436,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(436,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(436,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(447,7): warning C4101: 'fallo': variable local sin referencia
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(566,10): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(566,10): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(566,10): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(566,10): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(675,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(705,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+  cod_final_C.vcxproj -> C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\x64\Debug\cod_final_C.exe
