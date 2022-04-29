@@ -645,18 +645,26 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 	char fallo;
 	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
-	do
+	do //Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
 	{
 		
 		distancia = leer_sensor_distancia(Arduino);
 		temperatura = leer_sensor_temperatura(Arduino);
 		vol = volumen(float (distancia));
 
-		//Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
-		printf("%.2f ml \n", vol);
-		printf("%f \n", temperatura);
+		if (temperatura > temperaturaselec + 5 || vol >= volumenselec)
+		{
+			apagar_rele(Arduino);
+		}
+		else
+		{
+			activar_rele(Arduino);
+		}
+
+		printf("%.2f ml   %.2f ºC \n", vol, temperatura);
 		printf("------------------------------- \n");
 		Sleep(PAUSA_MS);
+		
 
 	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
 	printf("\n\nPULSE <ENTER> PARA VER ÚLTIMOS DATOS");
@@ -665,8 +673,8 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 
 	printf("\n\t ÚLTIMOS DATOS TOMADOS \n");
 	printf("---------------------------------- \n");
-	printf("%.2f ml \n", vol);
-	printf("%f \n", temperatura);
+	printf("%.2f ml   %.2f ºC \n", vol, temperatura);
+	
 }
 
 //MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
