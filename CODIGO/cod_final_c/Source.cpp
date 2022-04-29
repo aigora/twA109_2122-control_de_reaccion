@@ -7,6 +7,9 @@
 #include "SerialClass/SerialClass.h"
 #include <math.h>
 
+#include <iostream>
+#include <ctime>
+
 #define MAX_BUFFER 200
 #define PAUSA_MS 200
 #define TAM 20
@@ -635,16 +638,35 @@ void proceso_manual(Serial* Arduino)
 //INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
 void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
 {
+
+	float temperatura;
+	float vol;
+	float distancia;
+	char fallo;
 	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
 	do
 	{
-
+		
+		distancia = leer_sensor_distancia(Arduino);
+		temperatura = leer_sensor_temperatura(Arduino);
+		vol = volumen(float (distancia));
 
 		//Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
+		printf("%.2f ml \n", vol);
+		printf("%f \n", temperatura);
+		printf("------------------------------- \n");
+		Sleep(PAUSA_MS);
 
+	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
+	printf("\n\nPULSE <ENTER> PARA VER ÚLTIMOS DATOS");
+	scanf_s("%c", &fallo);  //Una vez reciba un dato y lo almacene se procede a borrar la pantalla
+	system("cls");
 
-	} while (_kbhit() == 0);
+	printf("\n\t ÚLTIMOS DATOS TOMADOS \n");
+	printf("---------------------------------- \n");
+	printf("%.2f ml \n", vol);
+	printf("%f \n", temperatura);
 }
 
 //MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
