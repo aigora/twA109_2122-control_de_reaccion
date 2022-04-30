@@ -41,7 +41,11 @@ C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO
 C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(710,12): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
 C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(710,12): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
 C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(710,12): message : este argumento se utiliza como un tamaño de búfer
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(734,12): warning C4473: "scanf_s": no se pasaron suficientes argumentos para la cadena de formato
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(734,12): message : los marcadores de posición y sus parámetros esperan 2 argumentos variádicos, pero se proporcionaron 1
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(734,12): message : el argumento variádico 2 que falta es requerido por la cadena de formato '%c'
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(734,12): message : este argumento se utiliza como un tamaño de búfer
 C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(682,7): warning C4101: 'datos_guardar': variable local sin referencia
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(762,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
-C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(792,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(765,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
+C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\Source.cpp(795,34): warning C4244: 'argumento': conversión de 'float' a 'DWORD'; posible pérdida de datos
   cod_final_C.vcxproj -> C:\Users\olsso\OneDrive\Documentos\GitHub\twA109_2122-control_de_reaccion\CODIGO\cod_final_C\x64\Debug\cod_final_C.exe

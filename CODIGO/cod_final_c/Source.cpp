@@ -663,7 +663,7 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 		}
 		else
 		{
-			fprintf(historial, "-> Destilación manual ha llegado a %.2fCº destilando %.2fml\n", temperaturag, volumeng);
+			fprintf(historial, "-> Destilación manual ha llegado a %.2f Cº destilando %.2f ml\n", temperaturag, volumeng);
 			scanf_s("%c", &fallo);
 			system("cls");
 			fclose(historial);
@@ -725,11 +725,14 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
 		if (historial == NULL)
 		{
+			system("cls");
 			printf("  No se ha podido registrar la destilación correctamente");
 		}
 		else
 		{
-			fprintf(historial, "-> Destilación con nombre <%s> ha llegado a %.2fCº destilando %.2fml\n", seleccionada, temperaturag, volumeng);
+			fprintf(historial, "-> Destilación automática con nombre: %s  Ha llegado a %.2f Cº destilando %.2f ml\n", seleccionada, temperaturag, volumeng);
+			scanf_s("%c", &fallo);
+			system("cls");
 			fclose(historial);
 		}
 	}
