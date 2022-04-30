@@ -53,7 +53,8 @@ int main(void)
 	char puerto[] = "COM5";
 	int opcion_menu, respuesta;
 	char fallo;
-	int formatrabajo;
+	int formatrabajo, i = 0, j, w;
+	PROCESO inter[TAM];
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
 	//para historial
@@ -72,7 +73,7 @@ int main(void)
 		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
 		if (historial == NULL)
 		{
-			printf("  Error al abrir los archivos del historial de procesos ");
+			printf("\n  Error al abrir los archivos del historial de procesos\n");
 			formatrabajo = 0;
 		}
 		if (historial != NULL)
@@ -80,30 +81,42 @@ int main(void)
 			fprintf(historial, "== (nueva inicialización de programa) ==\n");
 			fclose(historial);
 		}
-		ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+		ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "rb");
 		if (datos == NULL)
 		{
-			printf("  Error al abrir los archivos de las destilaciones preconfiguradas");
-			formatrabajo = 0;
+			printf("\n  No se ha cargado nunguna destilación preconfigurada\n");
 		}
-		if (datos != NULL)
+		else
 		{
 			fseek(datos, 0, SEEK_END);
-			if (ftell(datos) == 0)
+			if (ftell(datos) != 0)
 			{
-				fclose(datos);
-			}
-			else
-			{
-				fclose(datos);
-				ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+				fseek(datos, 0, SEEK_SET);
 				while (!feof(datos))
+				{
+					fread(&inter[i], sizeof(PROCESO), 1, datos);
+					i++;
+				}
+				fclose(datos);
+				
+				for (j = 0; j < i-1; j++)
 				{
 					pro = (PROCESO*)malloc(sizeof(PROCESO));
 					pro->siguiente = cab;
 					cab = pro;
-					fread(pro, sizeof(PROCESO), 1, datos);
+					for (w = 0; w < TAM; w++)
+					{
+						pro->nombre[w] = inter[j].nombre[w];
+					}
+					(*pro).temperatura = inter[j].temperatura;
+					(*pro).volmax = inter[j].volmax;
 				}
+				pro = cab;
+				
+			}
+			else
+			{
+				printf("\n  No existe ninguna destilación guardada\n");
 				fclose(datos);
 			}
 		}
@@ -503,15 +516,12 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 	printf("\t==================================\n");
 	printf("\t  DESTILACIONES PRECONFIGURADAS\n");
 	printf("\t==================================\n");
-
 	pro = cab;
-	printf("\n  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
-	puts(pro->nombre);
-	while (pro->siguiente != NULL)
+	while (pro != NULL)
 	{
-		pro = pro->siguiente;
-		printf("  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
+		printf("\n  -> Destilación a %dCº y %dml de volumen objetivo con nombre: ", (*pro).temperatura, (*pro).volmax);
 		puts(pro->nombre);
+		pro = pro->siguiente;
 	}
 	printf("  _________________________________________________________________________________________________\n\n");
 	do
