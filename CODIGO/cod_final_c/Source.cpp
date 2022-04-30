@@ -643,6 +643,7 @@ void final_programa(int formatrabajo)
 void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
 	float vol;
+	char fallo;
 	char nombreg[TAM];
 	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
 	vol = leer_sensor_distancia(Arduino);
@@ -657,13 +658,14 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
 		if (historial == NULL)
 		{
+			system("cls");
 			printf("  No se ha podido registrar la destilación correctamente");
 		}
 		else
 		{
-			printf("  Introduzca nombre de la destilación: ");
-			scanf_s("%s", nombreg);
-			fprintf(historial, "-> Destilación con nombre <%s> ha llegado a %.2fCº destilando %.2fml\n", nombreg, temperaturag, volumeng);
+			fprintf(historial, "-> Destilación manual ha llegado a %.2fCº destilando %.2fml\n", temperaturag, volumeng);
+			scanf_s("%c", &fallo);
+			system("cls");
 			fclose(historial);
 		}
 	}
