@@ -10,10 +10,10 @@
 #include <ctime>
 
 #define MAX_BUFFER 200
-#define TAM 20 //tamaño de cadena de caracteres del nombre de las destilaciones preconfiguradas
-#define PAUSA 4000 //tiempo de espera en ms entre mediciones en proceso automatico 
-#define RADIO 3 //radio de recipiente de destilado en mm
-#define ALTURA 60 //altura de recipiente de destilado en mm
+#define PAUSA_MS 200
+#define TAM 20
+#define RADIO 3
+#define ALTURA 60
 
 struct nodo
 {
@@ -78,7 +78,7 @@ int main(void)
 		}
 		if (historial != NULL)
 		{
-			fprintf(historial, "\n== (nueva inicialización de programa) ==\n");
+			fprintf(historial, "== (nueva inicialización de programa) ==\n");
 			fclose(historial);
 		}
 		ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "rb");
@@ -341,7 +341,7 @@ int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_
 	int bytes_recibidos = 0, total = 0;
 	int intentos = 0, fin_linea = 0;
 	Arduino->WriteData((char*)mensaje_enviar, strlen(mensaje_enviar));
-	Sleep(200);
+	Sleep(PAUSA_MS);
 	bytes_recibidos = Arduino->ReadData(mensaje_recibir, sizeof(char) * MAX_BUFFER - 1);
 	while ((bytes_recibidos > 0 || intentos < 5) && fin_linea == 0)
 	{
@@ -353,7 +353,7 @@ int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_
 		}
 		else
 			intentos++;
-		Sleep(200);
+		Sleep(PAUSA_MS);
 		bytes_recibidos = Arduino->ReadData(mensaje_recibir + total, sizeof(char) * MAX_BUFFER - 1);
 	}
 	if (total > 0)
@@ -557,7 +557,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		if (opcion != 1 && opcion != 2 && opcion != 3)
 		{
 			system("cls");
-			printf("\n  Opción no válida\n\n");
+			printf("\n Opción no valida\n\n");
 		}
 	} while (opcion != 1 && opcion != 2 && opcion != 3);
 	switch (opcion)
@@ -636,7 +636,7 @@ int inicio_programa(void)
 		if (opcion != 1 && opcion != 2)
 		{
 			system("cls");
-			printf("\n  Opción no válida\n");
+			printf("\n  Opción no valida\n");
 		}
 	} while (opcion != 1 && opcion != 2);
 	switch (opcion)
@@ -691,7 +691,9 @@ void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PRO
 	while (_kbhit() == 0){}
 }
 
-//PROCESO MANUAL
+//----------------------------------------------------PENDIENTES-----------------------------------------------------------
+
+//PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
 void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
 	float vol = 0;
@@ -701,7 +703,7 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 	int calentador = 0;
 	char fallo;
 	char nombreg[TAM];
-	float volumeng = 0, temperaturag = 0; 
+	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
 
 	printf("\n\t==================================\n");
 	printf("\t\t  PROCESO MANUAL\n");
@@ -709,21 +711,25 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 	printf(" En esta opción de proceso manual, podrá manejar el encendido y apagado del calentador, y ver tanto la temperatura\n del líquido inicial como el volumen final obtenido.\n\n");
 	printf(" Escoja la opción '1. Encender calentador' para comenzar el proceso manual Debe estar al tanto de la temperatura\n como del volumen. Para ello, pulse la opción '3. Medir temperatura y volimen'.\n");
 	printf(" Cuando desee dar por finalizada la destilación, pulse '4. Teminar proceso manual'.\n\n Si quiere volver al menú principal, pulse '5. Salir'.\n\n\n");
-	printf("\n\n\n\tPULSE <ENTER> ");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
 
+
 	do
 	{
-		printf("\n   OPCIONES");
-		printf("\n  ==========");
-		printf(" \n");
-		printf(" 1 - Encender calentador\n");
-		printf(" 2 - Apagar calentador\n");
-		printf(" 3 - Medir temperatura y volumen\n");
-		printf(" 4 - Teminar proceso manual");
-		printf("\n\n\t  ELIGE OPCIÓN: ");
-		opcion_calentador = arreglo_opcion();
+		printf(" \n\n");
+		printf(" ---OPCIONES---");
+		printf(" \n\n");
+		printf(" 1. Encender calentador\n");
+		printf(" 2. Apagar calentador\n");
+		printf(" 3. Medir temperatura y volumen\n");
+		printf(" 4. Teminar proceso manual\n");
+		printf(" 5. Salir\n");
+		printf("\n Escoja opción:");
+
+		scanf_s("%d", &opcion_calentador);
+		scanf_s("%c", &fallo);
 
 		switch (opcion_calentador)
 		{
@@ -731,13 +737,13 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 			system("cls");
 			calentador = 1;
 			activar_rele(Arduino);
-			printf("\n  (El calentador está encendido)\n");
+			printf(" \n\n El calentador está encendido\n");
 			break;
 		case 2:
 			system("cls");
 			calentador = 0;
 			apagar_rele(Arduino);
-			printf("\n  (El calentador está apagado)\n");
+			printf(" \n\n El calentador está apagado\n");
 			break;
 		case 3:
 			system("cls");
@@ -745,97 +751,37 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 			vol = volumen(dist);
 			temp = leer_sensor_temperatura(Arduino);
 			if (calentador == 1)
-				printf("\n  (El calentador está encendido)\n");
+				printf(" \n\n El calentador está encendido\n");
 			else
-				printf("\n  (El calentador está apagado)\n");
+				printf(" \n\n El calentador está apagado\n");
 
-			printf("\n  Temperatura: %.2f ml        Volumen de destilado: %.2f ºC\n", temp, vol);
+			printf(" \n\n");
+			printf(" Volumen de destilado:%.2f ml\n", vol);
+			printf(" Temperatura: %.2f ºC\n\n", temp);
 			break;
 		case 4:
 			system("cls");
 			apagar_rele(Arduino);
-			printf("\n  Proceso de destilación manual finalizado\n\n\n");
+			printf("\n Usted ha terminado este proceso de destilación manual.\n\n\n");
 			dist = leer_sensor_distancia(Arduino);
-			volumeng= volumen(dist);
-			temperaturag = leer_sensor_temperatura(Arduino);
+			vol = volumen(dist);
+			temp = leer_sensor_temperatura(Arduino);
+			temperaturag = temp;
+			volumeng = vol;
+			printf(" VOLUMEN DE DESTILADO FINAL OBTENIDO: %.2f ml\n\n", volumeng);
 			printf(" TEMPERATURA FINAL: %.2f ºC\n\n", temperaturag);
-			printf(" VOLUMEN DE DESTILADO FINAL OBTENIDO: %.2f ml\n", volumeng);
-			printf("\n\n\n\tPULSE <ENTER> ");
-			scanf_s("%c", &fallo);
+			break;
+		case 5:
 			system("cls");
 			break;
 		default:
 			system("cls");
-			printf("\n  Opción no válida\n\n");
-			break;
+			printf("Opción incorrecta. Elija una opción válida:");
 		}
-	} while (opcion_calentador != 4);
+	} while (opcion_calentador != 5);
 
-	//guardar los datos en el historial
-	if (formatrabajo == 1)
-	{
-		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
-		if (historial == NULL)
-		{
-			printf("\n  No se ha podido registrar la destilación correctamente\n\n");
-		}
-		else
-		{
-			fprintf(historial, "-> Destilación manual ha llegado a %.2f ºC destilando %.2f ml\n", temperaturag, volumeng);
-			fclose(historial);
-			printf("\n  Se ha registrado la destilación correctamente\n\n");
-		}
-	}
-}
-
-//INICIAR  PROCESO AUTOMÁTICO 
-void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
-{
-	float temperatura, vol, distancia;
-	char fallo;
-	
-	printf("\n\t======================================\n");
-	printf("\t\t  PROCESO AUTOMÁTICO\n");
-	printf("\t======================================\n\n");
-	printf("  El proceso terminará cuando presiones cualquier tecla o cuando se llegue al volumen deseado");
-	printf("\n\n\n\tPULSE <ENTER> PARA COMENZAR ");
-	scanf_s("%c", &fallo);
-	system("cls");
-
-	activar_rele(Arduino);
-	printf("\n\t======================================\n");
-	printf("\t\t  PROCESO AUTOMÁTICO\n");
-	printf("\t======================================\n\n");
-	printf("  El proceso terminará cuando presiones cualquier tecla o cuando se llegue al volumen deseado\n");
-	printf(" ---------------------------------------------------------------------------------------------\n\n");
-	
-	do 
-	{
-		distancia = leer_sensor_distancia(Arduino);
-		temperatura = leer_sensor_temperatura(Arduino);
-		vol = volumen(distancia);
-
-		if (temperatura >= temperaturaselec + 2)
-		{
-			apagar_rele(Arduino);
-		}
-		if ( temperatura > temperaturaselec - 1 && temperatura < temperaturaselec)
-		{
-			activar_rele(Arduino);
-		}
-		printf("  Temperatura: %.2f ml        Volumen de destilado: %.2f ºC\n", temperatura, vol);
-		Sleep(PAUSA);
-
-		if (vol >= volumenselec)
-		{
-			apagar_rele(Arduino);
-			printf("\n  SE HA LLEGADO AL VOLUMEN DESEADO\n");
-			printf("\n\n\n\tPULSE <ENTER>");
-			while (_kbhit() == 0) {}
-		}
-	} while (_kbhit() == 0); 
-
-	//guardar los datos en el historial
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
+	//código que guarda los datos en el historial
 	if (formatrabajo == 1)
 	{
 		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
@@ -846,9 +792,137 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 		}
 		else
 		{
-			fprintf(historial, "-> Destilación automática con nombre: %s   Ha destilado %.2f ml a una temperatura final de %.2f ºC\n", seleccionada, vol, temperatura);
+			fprintf(historial, "-> Destilación manual ha llegado a %.2f Cº destilando %.2f ml\n", temperaturag, volumeng);
+			scanf_s("%c", &fallo);
+			system("cls");
 			fclose(historial);
-			printf("\n  Se ha registrado la destilación correctamente\n\n");
 		}
 	}
 }
+//INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
+void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
+{
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
+	float temperatura;
+	float vol;
+	float distancia;
+	char fallo;
+	char datos_guardar[50];
+	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
+	
+	printf("\t==================================\n");
+	printf("\t  PROCESO AUTOMÁTICO \n");
+	printf("\t==================================\n\n");
+	
+	printf("El proceso terminará cuando presiones cualquier tecla o cuando se llegue al volumen deseado");
+	
+	do //Este "do while" hace que la acción de dentro ocurra hasta que se pulse CUALQUIER tecla del teclado
+	{
+		
+		distancia = leer_sensor_distancia(Arduino);
+		temperatura = leer_sensor_temperatura(Arduino);
+		vol = volumen(float (distancia));
+
+		if (temperatura > temperaturaselec + 5 || vol >= volumenselec)
+		{
+			apagar_rele(Arduino);
+		}
+		if (temperatura = temperaturaselec + 1 && vol < volumenselec)
+		{
+			activar_rele(Arduino);
+		}
+
+		printf("%.2f ml   %.2f ºC \n", vol, temperatura);
+		printf("------------------------------- \n");
+		Sleep(PAUSA_MS);
+		
+		if (vol >= volumenselec)
+		{
+			printf("\n\t\tSE HA LLEGADO AL VOLUMEN DESADO");
+			printf("\n\nPULSE CUALQUIER TECLA PARA VOLVER AL MENÚ PRINCIPAL");
+			scanf_s("%c", &fallo);
+			system("cls");
+		}
+
+	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
+
+
+	//código para guardar los datos en el historial
+	if (formatrabajo == 1)
+	{
+		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
+		if (historial == NULL)
+		{
+			system("cls");
+			printf("  No se ha podido registrar la destilación correctamente");
+		}
+		else
+		{
+			fprintf(historial, "-> Destilación automática con nombre: %s  Ha llegado a %.2f Cº destilando %.2f ml\n", seleccionada, temperaturag, volumeng);
+			scanf_s("%c", &fallo);
+			system("cls");
+			fclose(historial);
+		}
+	}
+}
+
+//MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
+void monitorizar_sensor_distancia(Serial* Arduino)
+{
+	float frecuencia, distancia;
+	char tecla;
+	do
+	{
+		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
+		scanf_s("%f", &frecuencia);
+	} while (frecuencia < 0.5 || frecuencia>2.0);
+	printf("Pulse una tecla para finalizar la monitorización\n");
+	do
+	{
+		if (Arduino->IsConnected())
+		{
+			distancia = leer_sensor_distancia(Arduino);
+			if (distancia != -1)
+				printf("%.2f ", distancia);
+			else
+				printf("XXX ");
+		}
+		else
+			printf("\nNo se ha podido conectar con Arduino.\n");
+		if ((1 / frecuencia) * 1000 > PAUSA_MS)
+			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
+	} while (_kbhit() == 0);
+	tecla = _getch();
+	return;
+}
+
+//MONITORIZAR SENSOR TEMPERATURA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
+void monitorizar_sensor_temperatura(Serial* Arduino)
+{
+	float frecuencia, temperatura;
+	char tecla;
+	do
+	{
+		printf("Establezca frecuencia de muestreo (0,5 Hz - 2,0 Hz):");
+		scanf_s("%f", &frecuencia);
+	} while (frecuencia < 0.5 || frecuencia>2.0);
+	printf("Pulse una tecla para finalizar la monitorización\n");
+	do
+	{
+		if (Arduino->IsConnected())
+		{
+			temperatura = leer_sensor_temperatura(Arduino);
+			if (temperatura != -1)
+				printf("%.2f ", temperatura);
+			else
+				printf("XXX ");
+		}
+		else
+			printf("\nNo se ha podido conectar con Arduino.\n");
+		if ((1 / frecuencia) * 1000 > PAUSA_MS)
+			Sleep((1 / frecuencia) * 1000 - PAUSA_MS);
+	} while (_kbhit() == 0);
+	tecla = _getch();
+	return;
+}
+
