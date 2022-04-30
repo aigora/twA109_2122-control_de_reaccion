@@ -832,17 +832,17 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 			activar_rele(Arduino);
 		}
 
-		if (vol >= volumenselec)
-		{
-			printf("Se ha llegado al volumen deseado");
-			scanf_s("%c", &fallo);
-			system("cls");
-		}
-
 		printf("%.2f ml   %.2f ºC \n", vol, temperatura);
 		printf("------------------------------- \n");
 		Sleep(PAUSA_MS);
 		
+		if (vol >= volumenselec)
+		{
+			printf("\n\t\tSE HA LLEGADO AL VOLUMEN DESADO");
+			printf("\n\nPULSE CUALQUIER TECLA PARA VOLVER AL MENÚ PRINCIPAL");
+			scanf_s("%c", &fallo);
+			system("cls");
+		}
 
 	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
 
