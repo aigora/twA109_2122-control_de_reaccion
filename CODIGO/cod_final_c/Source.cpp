@@ -45,7 +45,7 @@ int inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
 void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e);
 int arreglo_opcion(void);
-void final_programa(int formatrabajo);
+void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PROCESO* cab);
 
 int main(void)
 {
@@ -56,8 +56,12 @@ int main(void)
 	int formatrabajo;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
+	//para historial
 	FILE* historial = NULL;
 	errno_t e = NULL;
+	//para destilaciones preconfiguradas
+	FILE* datos = NULL;
+	errno_t ed = NULL;
 
 	setlocale(LC_ALL, "es-ES");
 	Arduino = new Serial((char*)puerto);
@@ -68,13 +72,24 @@ int main(void)
 		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
 		if (historial == NULL)
 		{
-			printf("  Error al abrir los archivos para almacenar datos");
+			printf("  Error al abrir los archivos del historial de procesos ");
 			formatrabajo = 0;
 		}
-		else
+		if (historial != NULL)
 		{
-			fprintf(historial, "==NUEVA INICIALIZACIÓN DE PROGRAMA==\n");
+			fprintf(historial, "== (nueva inicialización de programa) ==\n");
 			fclose(historial);
+		}
+		ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+		if (datos == NULL)
+		{
+			printf("  Error al abrir los archivos de las destilaciones preconfiguradas");
+			formatrabajo = 0;
+		}
+		if (datos != NULL)
+		{
+			//00000000000000000000000000000000000000000000000000000000000000000000000000000000
+			fclose(datos);
 		}
 	}
 
@@ -119,7 +134,7 @@ int main(void)
 			guia();
 			break;
 		case 6:
-			final_programa(formatrabajo);
+			final_programa(formatrabajo, datos, ed, pro, cab);
 			break;
 		default: 
 			system("cls");
@@ -571,9 +586,7 @@ int arreglo_opcion(void)
 	return opcion;
 }
 
-//--------------------------------------------------------------------------------------------------------------------------------------------PENDIENTES------------------------------------------------------------------
-
-//PANTALLA INICIO PROGRAMA (Hay que añadir la opción de cargar los datos)
+//PANTALLA INICIO PROGRAMA
 int inicio_programa(void)
 {
 	char fallo;
@@ -603,7 +616,6 @@ int inicio_programa(void)
 	switch (opcion)
 	{
 	case 1:
-		//inacabada
 		system("cls");
 		formatrabajo = 1;
 		break;
@@ -616,15 +628,31 @@ int inicio_programa(void)
 	return formatrabajo;
 }
 
-//PANTALLA FINAL PROGRAMA (Hay que añadir la opción de guardar los datos)
-void final_programa(int formatrabajo)
-{
-	system("cls");
+//-----------------------------------------------------------------------------------------------------
 
+//PANTALLA FINAL PROGRAMA (Hay que añadir la opción de guardar los datos)
+void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PROCESO* cab)
+{
 	switch (formatrabajo)
 	{
 	case 1:
-		//inacabada
+		pro = cab;
+		if (pro == NULL)
+		{
+			ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+			fclose(datos);
+		}
+		else
+		{
+			ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+			while (pro != NULL)
+			{
+				fwrite(pro, sizeof(PROCESO), 1, datos);
+				pro = pro->siguiente;
+			}
+			fclose(datos);
+		}
+
 		system("cls");
 		printf("\n  Los datos del programa han sido guardados\n");
 		break;
