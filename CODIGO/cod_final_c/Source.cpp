@@ -464,8 +464,8 @@ void guia(void)
 	printf(" Para acceder a destilaciones preconfiguradas, pulse '2'.Le aparecerán todas las destilaciones que usted haya\n");
 	printf(" configurado previamente. Para seleccionar una destilación, escriba el nombre de la misma y posteriormente, pulse '1'\n");
 	printf(" si desea comenzar el proceso de destilación, '2' en caso de que quiera borrarla de la memoria del programa, o '3' para\n volver al menú principal.\n\n");
-	printf(" Para realizar un proceso manual, pulse '3'. Podrá activar y desactivar el calentador, y se le mostrará a tiempo real\n");
-	printf(" la temperatura interna del líquido en proceso de destilación, además del volumen de destilado que se vaya obteniendo,\n pudiendo acabar el proceso cuando desee.\n\n");
+	printf(" Para realizar un proceso manual, pulse '3'. Podrá activar y desactivar el calentador, ver la temperatura\n");
+	printf(" interna del líquido en proceso de destilación, el volumen de destilado que se vaya obteniendo, y pudiendo acabar\n el proceso cuando desee.\n\n");
 	printf(" Para realizar una prueba del funcionamiento de los sensores y el relé, elija la opción '4'.\n\n");
 	printf(" Para salir del programa, elija la opción '6'.\n");
 	printf(" (El volumen y la temperatura final de las destilaciones se guerdará en una carpeta)\n");
@@ -696,16 +696,91 @@ void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PRO
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
 void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
-	float vol;
+	float vol = 0;
+	float dist = 0;
+	float temp = 0;
+	int opcion_calentador;
+	int calentador = 0;
 	char fallo;
 	char nombreg[TAM];
 	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
-	vol = leer_sensor_distancia(Arduino);
-	vol = volumen(vol);
-	printf("%.2f ml", vol);
+
+	printf("\n\t==================================\n");
+	printf("\t\t  PROCESO MANUAL\n");
+	printf("\t==================================\n\n");
+	printf(" En esta opción de proceso manual, podrá manejar el encendido y apagado del calentador, y ver tanto la temperatura\n del líquido inicial como el volumen final obtenido.\n\n");
+	printf(" Escoja la opción '1. Encender calentador' para comenzar el proceso manual Debe estar al tanto de la temperatura\n como del volumen. Para ello, pulse la opción '3. Medir temperatura y volimen'.\n");
+	printf(" Cuando desee dar por finalizada la destilación, pulse '4. Teminar proceso manual'.\n\n Si quiere volver al menú principal, pulse '5. Salir'.\n\n\n");
+	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
+	scanf_s("%c", &fallo);
+	system("cls");
 
 
+	do
+	{
+		printf(" \n\n");
+		printf(" ---OPCIONES---");
+		printf(" \n\n");
+		printf(" 1. Encender calentador\n");
+		printf(" 2. Apagar calentador\n");
+		printf(" 3. Medir temperatura y volumen\n");
+		printf(" 4. Teminar proceso manual\n");
+		printf(" 5. Salir\n");
+		printf("\n Escoja opción:");
 
+		scanf_s("%d", &opcion_calentador);
+		scanf_s("%c", &fallo);
+
+		switch (opcion_calentador)
+		{
+		case 1:
+			system("cls");
+			calentador = 1;
+			activar_rele(Arduino);
+			printf(" \n\n El calentador está encendido\n");
+			break;
+		case 2:
+			system("cls");
+			calentador = 0;
+			apagar_rele(Arduino);
+			printf(" \n\n El calentador está apagado\n");
+			break;
+		case 3:
+			system("cls");
+			dist = leer_sensor_distancia(Arduino);
+			vol = volumen(dist);
+			temp = leer_sensor_temperatura(Arduino);
+			if (calentador == 1)
+				printf(" \n\n El calentador está encendido\n");
+			else
+				printf(" \n\n El calentador está apagado\n");
+
+			printf(" \n\n");
+			printf(" Volumen de destilado:%.2f ml\n", vol);
+			printf(" Temperatura: %.2f ºC\n\n", temp);
+			break;
+		case 4:
+			system("cls");
+			apagar_rele(Arduino);
+			printf("\n Usted ha terminado este proceso de destilación manual.\n\n\n");
+			dist = leer_sensor_distancia(Arduino);
+			vol = volumen(dist);
+			temp = leer_sensor_temperatura(Arduino);
+			temperaturag = temp;
+			volumeng = vol;
+			printf(" VOLUMEN DE DESTILADO FINAL OBTENIDO: %.2f ml\n\n", volumeng);
+			printf(" TEMPERATURA FINAL: %.2f ºC\n\n", temperaturag);
+			break;
+		case 5:
+			system("cls");
+			break;
+		default:
+			system("cls");
+			printf("Opción incorrecta. Elija una opción válida:");
+		}
+	} while (opcion_calentador != 5);
+
+	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 	//código que guarda los datos en el historial
 	if (formatrabajo == 1)
 	{
@@ -724,7 +799,6 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 		}
 	}
 }
-
 //INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
 void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {

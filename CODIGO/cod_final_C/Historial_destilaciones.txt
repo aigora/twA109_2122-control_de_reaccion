@@ -1,0 +1,4 @@
+== (nueva inicialización de programa) ==
+-> Destilación automática con nombre: Alcohol
+  Ha llegado a 0,00 Cº destilando 0,00 ml
+== (nueva inicialización de programa) ==
