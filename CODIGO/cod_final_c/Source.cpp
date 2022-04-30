@@ -73,7 +73,7 @@ int main(void)
 		}
 		else
 		{
-			fprintf(historial, "=================\n");
+			fprintf(historial, "==NUEVA INICIALIZACIÓN DE PROGRAMA==\n");
 			fclose(historial);
 		}
 	}
