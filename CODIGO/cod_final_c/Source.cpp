@@ -12,7 +12,7 @@
 #define MAX_BUFFER 200
 #define TAM 20 //tamaño de cadena de caracteres del nombre de las destilaciones preconfiguradas
 #define PAUSA 4000 //tiempo de espera en ms entre mediciones en proceso automatico 
-#define RADIO 3 //radio de recipiente de destilado en mm
+#define RADIO 3 //radio de recipiente de destilado en cm
 #define ALTURA 60 //altura de recipiente de destilado en mm
 
 struct nodo
@@ -255,7 +255,7 @@ float volumen(float distancia)
 	float h;
 
 	h = (float)(ALTURA - distancia)/10; // dividimos entre 10 para pasar la unidad a cm
-	vol = (float)(h * pi * RADIO * RADIO); //volumen en mililirtos(centimetros cubicos)
+	vol = (float)(h * pi * RADIO * RADIO); //volumen en mililirtos (centimetros cubicos)
 	if (distancia > ALTURA)
 		vol = 0;
 
