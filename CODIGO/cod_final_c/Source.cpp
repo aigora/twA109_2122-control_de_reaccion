@@ -88,8 +88,24 @@ int main(void)
 		}
 		if (datos != NULL)
 		{
-			//00000000000000000000000000000000000000000000000000000000000000000000000000000000
-			fclose(datos);
+			fseek(datos, 0, SEEK_END);
+			if (ftell(datos) == 0)
+			{
+				fclose(datos);
+			}
+			else
+			{
+				fclose(datos);
+				ed = fopen_s(&datos, "Destilaciones_preconfiguradas.dxt", "wb");
+				while (!feof(datos))
+				{
+					pro = (PROCESO*)malloc(sizeof(PROCESO));
+					pro->siguiente = cab;
+					cab = pro;
+					fread(pro, sizeof(PROCESO), 1, datos);
+				}
+				fclose(datos);
+			}
 		}
 	}
 
@@ -628,9 +644,7 @@ int inicio_programa(void)
 	return formatrabajo;
 }
 
-//-----------------------------------------------------------------------------------------------------
-
-//PANTALLA FINAL PROGRAMA (Hay que añadir la opción de guardar los datos)
+//PANTALLA FINAL PROGRAMA
 void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PROCESO* cab)
 {
 	switch (formatrabajo)
@@ -666,6 +680,8 @@ void final_programa(int formatrabajo, FILE* datos, errno_t ed, PROCESO* pro, PRO
 	printf("\n\n\n\t\t\t    <PULSE CUALQUIER TECLA> ");
 	while (_kbhit() == 0){}
 }
+
+//----------------------------------------------------PENDIENTES-----------------------------------------------------------
 
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
 void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
