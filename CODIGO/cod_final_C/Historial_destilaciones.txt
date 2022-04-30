@@ -2,3 +2,12 @@
 -> Destilación automática con nombre: Alcohol
   Ha llegado a 0,00 Cº destilando 0,00 ml
 == (nueva inicialización de programa) ==
+== (nueva inicialización de programa) ==
+-> Destilación automática con nombre: lazaro
+  Ha llegado a 0,00 Cº destilando 0,00 ml
+-> Destilación manual ha llegado a 0,00 Cº destilando 0,00 ml
+-> Destilación manual ha llegado a 32,06 Cº destilando 0,00 ml
+== (nueva inicialización de programa) ==
+-> Destilación manual ha llegado a 0,00 Cº destilando 0,00 ml
+== (nueva inicialización de programa) ==
+-> Destilación manual ha llegado a 0,00 Cº destilando 0,00 ml
