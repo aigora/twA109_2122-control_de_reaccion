@@ -6,7 +6,6 @@
 #include <conio.h>
 #include "SerialClass/SerialClass.h"
 #include <math.h>
-
 #include <iostream>
 #include <ctime>
 
@@ -36,15 +35,15 @@ float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
 float volumen(float);
-void iniciar_pro_automatico(int temperatura, int volumen, char seleccionada[], Serial* Arduino);
+void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino, int formatrabajo, FILE* historial, errno_t e);
 void guia(void);
 PROCESO* eliminar_proceso(char seleccionada[], PROCESO* pro, PROCESO* cab);
 PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab);
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino);
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino, int formatrabajo, FILE* historial, errno_t e);
 void prueba_funcionamiento(Serial* Arduino);
 int inicio_programa(void);
 int p_rap_funcionamiento(Serial* Arduino);
-void proceso_manual(Serial* Arduino);
+void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e);
 int arreglo_opcion(void);
 void final_programa(int formatrabajo);
 
@@ -57,10 +56,28 @@ int main(void)
 	int formatrabajo;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
+	FILE* historial = NULL;
+	errno_t e = NULL;
 
 	setlocale(LC_ALL, "es-ES");
 	Arduino = new Serial((char*)puerto);
 	formatrabajo = inicio_programa();
+
+	if (formatrabajo == 1)
+	{
+		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
+		if (historial == NULL)
+		{
+			printf("  Error al abrir los archivos para almacenar datos");
+			formatrabajo = 0;
+		}
+		else
+		{
+			fprintf(historial, "=================\n");
+			fclose(historial);
+		}
+	}
+
 	do
 	{
 		opcion_menu = menu_ppal();
@@ -77,7 +94,7 @@ int main(void)
 				printf("\n  No hay ninguna destilación definida\n");
 			if (cab != NULL)
 			{
-				cab = destilaciones_preconfiguradas(pro, cab, Arduino);
+				cab = destilaciones_preconfiguradas(pro, cab, Arduino, formatrabajo, historial, e);
 				pro = cab;
 			}
 			break;
@@ -92,7 +109,7 @@ int main(void)
 			}
 			else
 			{
-				proceso_manual(Arduino);
+				proceso_manual(Arduino, formatrabajo, historial, e);
 			}
 			break;
 		case 4:
@@ -442,7 +459,7 @@ PROCESO* conf_nueva_destilacion(PROCESO* pro, PROCESO* cab)
 }
 
 //DESTILACIONES PRECONFIGURADAS 
-PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino)
+PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
 	int opcion, flag = 0;
 	char  seleccionada[TAM];
@@ -518,7 +535,7 @@ PROCESO* destilaciones_preconfiguradas(PROCESO* pro, PROCESO* cab, Serial* Ardui
 		}
 		else
 		{
-		iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada, Arduino);
+			iniciar_pro_automatico(temperaturaselec, volumenselec, seleccionada, Arduino, formatrabajo, historial, e);
 		}
 		break;
 	case 2:
@@ -609,11 +626,11 @@ void final_programa(int formatrabajo)
 	case 1:
 		//inacabada
 		system("cls");
-		printf("\n  Se han guardado los datos de las destilaciones preconfiguradas\n");
+		printf("\n  Los datos del programa han sido guardados\n");
 		break;
 	case 0:
 		system("cls");
-		printf("\n  No se han guardado los datos de las destilaciones preconfiguradas\n");
+		printf("\n  No se ha guardado nungún dato del programa\n");
 		break;
 	}
 	printf("\n\n\n\n\t\t\t   ==== FIN DE PROGRAMA ====\n\n\n\n");
@@ -623,26 +640,45 @@ void final_programa(int formatrabajo)
 }
 
 //PROCESO MANUAL (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "MAIN"
-void proceso_manual(Serial* Arduino)
+void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
 	float vol;
+	char nombreg[TAM];
+	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
 	vol = leer_sensor_distancia(Arduino);
 	vol = volumen(vol);
 	printf("%.2f ml", vol);
-	
-	
-	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 
+
+
+	//código que guarda los datos en el historial
+	if (formatrabajo == 1)
+	{
+		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
+		if (historial == NULL)
+		{
+			printf("  No se ha podido registrar la destilación correctamente");
+		}
+		else
+		{
+			printf("  Introduzca nombre de la destilación: ");
+			scanf_s("%s", nombreg);
+			fprintf(historial, "-> Destilación con nombre <%s> ha llegado a %.2fCº destilando %.2fml\n", nombreg, temperaturag, volumeng);
+			fclose(historial);
+		}
+	}
 }
 
 //INICIAR  PROCESO AUTOMÁTICO (inacabada) LA LLAMADA A ESTA FUNCIÓN ESTÁ EN LA FUNCIÓN "DESTILACIONES PRECONFIGURADAS"
-void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino)
+void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char seleccionada[], Serial* Arduino, int formatrabajo, FILE* historial, errno_t e)
 {
 	//hay que crar dos variables para guardar el dato final del volumen y la temperatura (hasta el que se llega)
 	float temperatura;
 	float vol;
 	float distancia;
 	char fallo;
+	char datos_guardar[50];
+	float volumeng = 0, temperaturag = 0; //variables de la temperatura y volumen finales que se guardaran en el historial
 	
 	printf("\t==================================\n");
 	printf("\t  PROCESO AUTOMÁTICO \n");
@@ -680,6 +716,21 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 
 	} while (_kbhit() == 0); //Pulsas una tecla y deja de tomar datos, se siguen viendo en pantalla
 
+
+	//código para guardar los datos en el historial
+	if (formatrabajo == 1)
+	{
+		e = fopen_s(&historial, "Historial_destilaciones.txt", "at");
+		if (historial == NULL)
+		{
+			printf("  No se ha podido registrar la destilación correctamente");
+		}
+		else
+		{
+			fprintf(historial, "-> Destilación con nombre <%s> ha llegado a %.2fCº destilando %.2fml\n", seleccionada, temperaturag, volumeng);
+			fclose(historial);
+		}
+	}
 }
 
 //MONITORIZAR SENSOR DISTANCIA (usar como ejemplo para proceso automático pero luego habrá que borrarla)
