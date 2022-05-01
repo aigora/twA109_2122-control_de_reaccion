@@ -629,8 +629,8 @@ int inicio_programa(void)
 	{
 		printf("\n   ¿CÓMO DESEA TRABAJAR?");
 		printf("\n  =======================\n");
-		printf("\n  1 - Cargando y almacenando las destilaciones preconfiguradas en la memoria");
-		printf("\n  2 - Sin guardar ni cargar datos de las destilaciones preconfiguradas");
+		printf("\n  1 - Cargando y almacenando las destilaciones en la memoria");
+		printf("\n  2 - Sin guardar ni cargar datos de las destilaciones");
 		printf("\n\n\t  ELIGE OPCIÓN: ");
 		opcion = arreglo_opcion();
 		if (opcion != 1 && opcion != 2)
