@@ -12,8 +12,8 @@
 #define MAX_BUFFER 200
 #define TAM 20 //tamaño de cadena de caracteres del nombre de las destilaciones preconfiguradas
 #define PAUSA 4000 //tiempo de espera en ms entre mediciones en proceso automatico 
-#define RADIO 3 //radio de recipiente de destilado en cm
-#define ALTURA 60 //altura de recipiente de destilado en mm
+#define RADIO 3.75 //radio de recipiente de destilado en cm
+#define ALTURA 170 //altura de recipiente de destilado en mm
 
 struct nodo
 {
@@ -29,8 +29,6 @@ void errror_conexion(void);
 float leer_sensor_distancia(Serial* Arduino);
 float float_from_cadena(char* cadena);
 int Enviar_y_Recibir(Serial* Arduino, const char* mensaje_enviar, char* mensaje_recibir);
-void monitorizar_sensor_distancia(Serial* Arduino);
-void monitorizar_sensor_temperatura(Serial* Arduino);
 float leer_sensor_temperatura(Serial* Arduino);
 int activar_rele(Serial* Arduino);
 int apagar_rele(Serial* Arduino);
@@ -217,7 +215,7 @@ float leer_sensor_distancia(Serial* Arduino)
 	char mensaje_recibido[MAX_BUFFER];
 
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_DISTANCIA\n", mensaje_recibido);
-	if (bytesRecibidos <= 0)
+	if (bytesRecibidos <= 15)
 	{
 		distancia = -500;
 	}
@@ -239,7 +237,7 @@ float leer_sensor_temperatura(Serial* Arduino)
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_TEMPERATURA\n", mensaje_recibido);
 	temperatura = float_from_cadena(mensaje_recibido);
 
-	if (bytesRecibidos <= 0)
+	if (bytesRecibidos >= 35)
 	{
 		temperatura = -500;
 	}
@@ -383,12 +381,12 @@ void prueba_funcionamiento(Serial* Arduino)
 
 	if (distancia == -500)
 		printf("\n  Error en el sensor de distancia\n");
-	else
-		printf("\n  El sensor de temperatura funciona correctamente\n");
+	if (distancia != -500)
+		printf("\n  El sensor de distancia funciona correctamente\n");
 
 	if (temperatura == -500)
 		printf("\n  Error en el sensor de temperatura\n");
-	else
+	if (temperatura != -500)
 		printf("\n  El sensor de temperatura funciona correctamente\n");
 
 	if (funciona == 0)
@@ -706,9 +704,9 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 	printf("\n\t==================================\n");
 	printf("\t\t  PROCESO MANUAL\n");
 	printf("\t==================================\n\n");
-	printf(" En esta opción de proceso manual, podrá manejar el encendido y apagado del calentador, y ver tanto la temperatura\n del líquido inicial como el volumen final obtenido.\n\n");
-	printf(" Escoja la opción '1. Encender calentador' para comenzar el proceso manual Debe estar al tanto de la temperatura\n como del volumen. Para ello, pulse la opción '3. Medir temperatura y volimen'.\n");
-	printf(" Cuando desee dar por finalizada la destilación, pulse '4. Teminar proceso manual'.\n\n Si quiere volver al menú principal, pulse '5. Salir'.\n\n\n");
+	printf(" En esta opción de proceso manual, podrá manejar el encendido y apagado del calentador, y ver tanto la temperatura\n del líquido como el volumen de destilado obtenido.\n\n");
+	printf(" Escoja la opción '1 - Encender calentador' para comenzar el proceso manual. Debe estar atento de la temperatura\n y del volumen. Para ello, pulse la opción '3 - Medir temperatura y volumen'.\n");
+	printf(" Cuando desee dar por finalizada la destilación, pulse '4 - Teminar proceso manual'\n También puede apagar el calentador con la opción '2'.");
 	printf("\n\n\n\tPULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
@@ -749,7 +747,7 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 			else
 				printf("\n  (El calentador está apagado)\n");
 
-			printf("\n  Temperatura: %.2f ml        Volumen de destilado: %.2f ºC\n", temp, vol);
+			printf("\n  Temperatura: %.2f ºC        Volumen de destilado: %.2f ml\n", temp, vol);
 			break;
 		case 4:
 			system("cls");
@@ -758,8 +756,8 @@ void proceso_manual(Serial* Arduino, int formatrabajo, FILE* historial, errno_t 
 			dist = leer_sensor_distancia(Arduino);
 			volumeng= volumen(dist);
 			temperaturag = leer_sensor_temperatura(Arduino);
-			printf(" TEMPERATURA FINAL: %.2f ºC\n\n", temperaturag);
-			printf(" VOLUMEN DE DESTILADO FINAL OBTENIDO: %.2f ml\n", volumeng);
+			printf("  TEMPERATURA FINAL: %.2f ºC\n\n", temperaturag);
+			printf("  VOLUMEN DE DESTILADO FINAL OBTENIDO: %.2f ml\n", volumeng);
 			printf("\n\n\n\tPULSE <ENTER> ");
 			scanf_s("%c", &fallo);
 			system("cls");
@@ -793,7 +791,8 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 {
 	float temperatura, vol, distancia;
 	char fallo;
-	
+	char solucionar;
+	solucionar = 0;
 	printf("\n\t======================================\n");
 	printf("\t\t  PROCESO AUTOMÁTICO\n");
 	printf("\t======================================\n\n");
@@ -806,7 +805,7 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 	printf("\n\t======================================\n");
 	printf("\t\t  PROCESO AUTOMÁTICO\n");
 	printf("\t======================================\n\n");
-	printf("  El proceso terminará cuando presiones cualquier tecla o cuando se llegue al volumen deseado\n");
+	printf("  El proceso terminará cuando presiones <ENTER> o cuando se llegue al volumen deseado\n");
 	printf(" ---------------------------------------------------------------------------------------------\n\n");
 	
 	do 
@@ -823,18 +822,31 @@ void iniciar_pro_automatico(int temperaturaselec, int volumenselec, char selecci
 		{
 			activar_rele(Arduino);
 		}
-		printf("  Temperatura: %.2f ml        Volumen de destilado: %.2f ºC\n", temperatura, vol);
+		printf("  Temperatura: %.2f ºC        Volumen de destilado: %.2f ml\n", temperatura, vol);
 		Sleep(PAUSA);
 
 		if (vol >= volumenselec)
 		{
+			solucionar = 1;
 			apagar_rele(Arduino);
 			printf("\n  SE HA LLEGADO AL VOLUMEN DESEADO\n");
 			printf("\n\n\n\tPULSE <ENTER>");
 			while (_kbhit() == 0) {}
 		}
 	} while (_kbhit() == 0); 
-
+	if (vol < volumenselec)
+	{
+		apagar_rele(Arduino);
+		printf("\n  NO SE HA LLEGADO AL VOLUMEN DESEADO\n");
+		printf("\n\n\n\tPULSE <ENTER>");
+		scanf_s("%c", &fallo);
+		scanf_s("%c", &fallo);
+	}
+	if (solucionar == 1)
+	{
+		scanf_s("%c", &fallo);
+	}
+	system("cls");
 	//guardar los datos en el historial
 	if (formatrabajo == 1)
 	{
