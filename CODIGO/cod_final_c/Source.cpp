@@ -5,7 +5,6 @@
 #include <locale.h>
 #include <conio.h>
 #include "SerialClass/SerialClass.h"
-#include <math.h>
 #include <iostream>
 #include <ctime>
 
@@ -616,7 +615,7 @@ int inicio_programa(void)
 	int formatrabajo;
 
 	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
-	printf("\tMatias Lopez Viagel\n\tDaniel Olsson Andrés\n\tDavid Mendez Velasquez");
+	printf("\tMatias López Viagel\n\tDaniel Olsson Andrés\n\tDavid Méndez Velásquez");
 	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
