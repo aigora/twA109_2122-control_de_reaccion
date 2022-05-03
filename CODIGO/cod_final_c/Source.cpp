@@ -24,7 +24,7 @@ struct nodo
 };
 typedef struct nodo PROCESO;
 
-int menu_ppal(void);
+int menu_ppal(int formatrabajo);
 void errror_conexion(void);
 float leer_sensor_distancia(Serial* Arduino);
 float float_from_cadena(char* cadena);
@@ -117,7 +117,7 @@ int main(void)
 
 	do
 	{
-		opcion_menu = menu_ppal();
+		opcion_menu = menu_ppal(formatrabajo);
 		switch (opcion_menu)
 		{
 		case 1:
@@ -168,7 +168,7 @@ int main(void)
 }
 
 //MENÚ PRINCIPAL
-int menu_ppal(void)
+int menu_ppal(int formatrabajo)
 {
 	int opcion;
 	
@@ -181,7 +181,10 @@ int menu_ppal(void)
 	printf("\t3 - Proceso manual\n");
 	printf("\t4 - Prueba funcionamiento\n");
 	printf("\t5 - Guía uso\n");
-	printf("\t6 - Salir\n");
+	if(formatrabajo == 1)
+		printf("\t6 - Guardar y salir\n");
+	if (formatrabajo == 0)
+		printf("\t6 - Salir\n");
 	printf("\n\n\t  ELIGE OPCIÓN: ");
 	opcion = arreglo_opcion();
 	
