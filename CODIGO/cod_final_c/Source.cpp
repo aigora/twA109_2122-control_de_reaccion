@@ -51,8 +51,8 @@ int main(void)
 	char puerto[] = "COM5";
 	int opcion_menu, respuesta;
 	char fallo;
-	int formatrabajo, i = 0, j, w;
-	PROCESO inter[TAM];
+	int formatrabajo, w;
+	PROCESO inter;
 	PROCESO* pro = NULL;
 	PROCESO* cab = NULL;
 	//para historial
@@ -90,27 +90,22 @@ int main(void)
 			if (ftell(datos) != 0)
 			{
 				fseek(datos, 0, SEEK_SET);
+				fread(&inter, sizeof(PROCESO), 1, datos);
 				while (!feof(datos))
-				{
-					fread(&inter[i], sizeof(PROCESO), 1, datos);
-					i++;
-				}
-				fclose(datos);
-				
-				for (j = 0; j < i-1; j++)
 				{
 					pro = (PROCESO*)malloc(sizeof(PROCESO));
 					pro->siguiente = cab;
 					cab = pro;
 					for (w = 0; w < TAM; w++)
 					{
-						pro->nombre[w] = inter[j].nombre[w];
+						pro->nombre[w] = inter.nombre[w];
 					}
-					(*pro).temperatura = inter[j].temperatura;
-					(*pro).volmax = inter[j].volmax;
+					(*pro).temperatura = inter.temperatura;
+					(*pro).volmax = inter.volmax;
+					fread(&inter, sizeof(PROCESO), 1, datos);
 				}
+				fclose(datos);
 				pro = cab;
-				
 			}
 			else
 			{
