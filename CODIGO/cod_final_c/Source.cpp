@@ -237,7 +237,7 @@ float leer_sensor_temperatura(Serial* Arduino)
 	bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_TEMPERATURA\n", mensaje_recibido);
 	temperatura = float_from_cadena(mensaje_recibido);
 
-	if (bytesRecibidos >= 35)
+	if (bytesRecibidos >= 35 || bytesRecibidos <=0)
 	{
 		temperatura = -500;
 	}
