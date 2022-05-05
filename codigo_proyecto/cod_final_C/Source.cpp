@@ -617,7 +617,7 @@ int inicio_programa(void)
 	int formatrabajo;
 
 	printf("\n\n\n\n\t\t\t\t===== CONTROL DE DESTILACIONES =====\n\n\n\n\n\n\n");
-	printf("\tMatias López Viagel\n\tDaniel Olsson Andrés\n\tDavid Méndez Velásquez");
+	printf("\tMatías López Viagel\n\tDaniel Olsson Andrés\n\tDavid Méndez Velásquez");
 	printf("\n\n\n\n\n\n\t\t\t\t\t   PULSE <ENTER> ");
 	scanf_s("%c", &fallo);
 	system("cls");
